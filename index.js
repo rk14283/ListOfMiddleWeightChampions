@@ -1,7 +1,6 @@
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
-const { fips } = require("crypto");
 
 function findRecordTable(tables) {
   //this function returns table with th
@@ -131,4 +130,46 @@ async function scrapeRecordTable(url) {
   //console.log(json.replace(/\\n/g, ""));
 }
 
-scrapeRecordTable("https://en.wikipedia.org/wiki/Marvelous_Marvin_Hagler");
+//scrapeRecordTable();
+
+async function scrapeChampions() {
+  const response = await axios.get(
+    "https://en.wikipedia.org/wiki/List_of_world_middleweight_boxing_champions"
+  );
+  const html = response.data;
+  const jsdom = new JSDOM(html);
+  const document = jsdom.window.document;
+  const tables = document.querySelectorAll("table");
+  const championTables = [];
+
+  for (table of tables) {
+    if (table.querySelector("th").textContent.includes("Reign Begun")) {
+      championTables.push(table);
+    }
+  }
+  //console.log(championTables.length);
+
+  const champions = [];
+  for (tableToScrape of championTables) {
+    const [headings, ...rows] = tableToScrape.querySelectorAll("tr");
+    for (row of rows) {
+      const cells = row.querySelectorAll("td");
+      //console.log("cells", cells[2]?.textContent);
+      //console.log("titleRow", cells[3]?.textContent);
+      const nameCell = cells[2];
+      const linkCountries = nameCell?.querySelectorAll("a")[0];
+      const link = nameCell?.querySelectorAll("a")[1];
+      //console.log("linkCOuntries", linkCountries?.href);
+      //console.log("link", link?.href);
+      if (link) {
+        champions.push(link?.href);
+      }
+    }
+  }
+  //console.log(champions);
+  for (const link of champions) {
+    scrapeRecordTable(`https://en.wikipedia.org${link}`);
+  }
+}
+
+scrapeChampions();
