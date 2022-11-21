@@ -10,21 +10,28 @@ async function scrapeInfoBox(infoboxTable) {
   const tableData = infoboxTable.querySelector(".infobox-data");
   //console.log(infoBoxTableBody);
 
-  console.log(tableTitle.textContent);
-  console.log(tableData.textContent);
+  //console.log(tableTitle.textContent);
+  //console.log(tableData.textContent);
 
   const headings = infoboxTable.querySelectorAll("tr");
-  const rows = infoboxTable.querySelectorAll("tr");
-
+  const boxerInfoBoxDataHeads = [];
   for (heading of headings) {
-    heads = heading.querySelector(".infobox-label")?.textContent;
-    console.log(heads);
-  }
-
-  for (heading of headings) {
+    heads = heading?.querySelector(".infobox-label")?.textContent;
     data = heading.querySelector(".infobox-data")?.textContent;
-    console.log(data);
+    if (heads && data) {
+      console.log(heads, data);
+    }
   }
+
+  // data = heading.querySelector(".infobox-data")?.textContent;
+  // if (heads && data) {
+  //   console.log(heads, data);
+  //   boxerInfoBoxDataHeads.push(heads);
+  // }
+  // console.log(boxerInfoBoxDataHeads);
+  //   }
+
+  //console.log(heads, data);
 
   //return { tableHead: tableHead };
 
@@ -44,6 +51,7 @@ async function scrapeRecordTable(url) {
   const fighterInfo = scrapeInfoBox(infoboxTable);
   //console.log(fighterInfo);
   //console.log(infoboxTable);
+  //console.log(scrapeInfoBox(infoboxTable));
 }
 
 scrapeRecordTable("https://en.wikipedia.org/wiki/Marvelous_Marvin_Hagler");
