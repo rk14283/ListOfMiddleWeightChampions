@@ -16,123 +16,142 @@ function findRecordTable(tables) {
   return null;
 }
 
+function parseMatchRow(row, headings) {
+  if (headings.textContent[57] == "A") {
+    const [
+      Number,
+      Result,
+      Record,
+      Opponent,
+      Type,
+      RoundTime,
+      Date,
+      Age,
+      Location,
+      Notes,
+    ] = row.querySelectorAll("td");
+
+    const serialNumber = Number?.textContent;
+    const fightResult = Result?.textContent;
+    const tally = Record?.textContent;
+    const foughtAgainst = Opponent?.textContent;
+    const winType = Type?.textContent;
+    const endRound = RoundTime?.textContent;
+    const fightDate = Date?.textContent;
+    const fighterAge = Age?.textContent;
+    const fightLocation = Location?.textContent;
+    const remarks = Notes?.textContent;
+
+    const boxerRecord = {
+      No: serialNumber,
+      Result: fightResult,
+      Record: tally,
+      Opponent: foughtAgainst,
+      Type: winType,
+      Round_Time: endRound,
+      Date: fightDate,
+      Age: fighterAge,
+      Location: fightLocation,
+      Notes: remarks,
+    };
+
+    return boxerRecord;
+  } else {
+    const [
+      Number,
+      Result,
+      Record,
+      Opponent,
+      Type,
+      RoundTime,
+      Date,
+      Location,
+      Notes,
+    ] = row.querySelectorAll("td");
+
+    const serialNumber = Number?.textContent;
+    const fightResult = Result?.textContent;
+    const tally = Record?.textContent;
+    const foughtAgainst = Opponent?.textContent;
+    const winType = Type?.textContent;
+    const endRound = RoundTime?.textContent;
+    const fightDate = Date?.textContent;
+    const fightLocation = Location?.textContent;
+    const remarks = Notes?.textContent;
+    const boxerRecord = {
+      No: serialNumber,
+      Result: fightResult,
+      Record: tally,
+      Opponent: foughtAgainst,
+      Type: winType,
+      Round_Time: endRound,
+      Date: fightDate,
+      // Age: fighterAge,
+      Location: fightLocation,
+      Notes: remarks,
+    };
+    return boxerRecord;
+  }
+}
+
+function parseInfoBox(infoboxTable) {
+  if (!infoboxTable) return {};
+
+  const imageBox = infoboxTable.querySelector(".infobox-image");
+  const imageUrl = imageBox?.querySelector("img")?.src;
+
+  // reach etc.. other stuff from infobox
+
+  return { imageUrl: imageUrl };
+}
+
 async function scrapeRecordTable(url) {
+  console.log("URL", url);
   const response = await axios.get(url);
   const html = response.data;
   const jsdom = new JSDOM(html);
   const document = jsdom.window.document;
+  const fighterName = document
+    .querySelector("h1")
+    .textContent.replace(" (boxer)", "");
+
+  const infoboxTable = document.querySelector(".infobox");
+  const fighterInfo = parseInfoBox(infoboxTable);
+  console.log(fighterInfo);
+
+  //Parse the record
   const tables = document.querySelectorAll("table");
-  //console.log(tables.length);
-  let tableToScrape = findRecordTable(tables);
-  if (!tableToScrape) return;
+  let fightingRecordTable = findRecordTable(tables);
+  if (!fightingRecordTable) return;
+  let record = parseRecord(fightingRecordTable);
 
-  //console.log(tableToScrape);
-  const [headings, ...rows] = tableToScrape.querySelectorAll("tr");
+  //write to a file
 
-  let record = [];
-  let heads = [];
+  const json = JSON.stringify({
+    name: fighterName,
+    ...fighterInfo,
+    record: record,
+  });
 
-  if (headings.textContent[57] == "A") {
-    for (row of rows) {
-      const [
-        Number,
-        Result,
-        Record,
-        Opponent,
-        Type,
-        RoundTime,
-        Date,
-        Age,
-        Location,
-        Notes,
-      ] = row.querySelectorAll("td");
-
-      const opponentName = Opponent?.textContent;
-      const serialNumber = Number?.textContent;
-      const fightResult = Result?.textContent;
-      const tally = Record?.textContent;
-      const foughtAgainst = Opponent?.textContent;
-      const winType = Type?.textContent;
-      const endRound = RoundTime?.textContent;
-      const fightDate = Date?.textContent;
-      const fighterAge = Age?.textContent;
-      const fightLocation = Location?.textContent;
-      const remarks = Notes?.textContent;
-      //console.log(opponentName,serialNumber,fightResult,tally,foughtAgainst,winType,endRound,fightDate,fighterAge,fightLocation,remarks);
-
-      const boxerRecord = {
-        No: serialNumber,
-        Result: fightResult,
-        Record: tally,
-        Opponent: foughtAgainst,
-        Type: winType,
-        Round_Time: endRound,
-        Date: fightDate,
-        Age: fighterAge,
-        Location: fightLocation,
-        Notes: remarks,
-      };
-      //console.log(boxerRecord);
-      record.push(boxerRecord);
-    }
-    //console.log(record);
-    const json = JSON.stringify(record);
-    const recordBoxer = url.split("https://en.wikipedia.org/wiki/");
-    fs.writeFileSync(`${recordBoxer}.json`, json.replace(/\\n/g, ""));
-  } else {
-    for (row of rows) {
-      const [
-        Number,
-        Result,
-        Record,
-        Opponent,
-        Type,
-        RoundTime,
-        Date,
-        //Age,
-        Location,
-        Notes,
-      ] = row.querySelectorAll("td");
-
-      const opponentName = Opponent?.textContent;
-      const serialNumber = Number?.textContent;
-      const fightResult = Result?.textContent;
-      const tally = Record?.textContent;
-      const foughtAgainst = Opponent?.textContent;
-      const winType = Type?.textContent;
-      const endRound = RoundTime?.textContent;
-      const fightDate = Date?.textContent;
-      // const fighterAge = Age?.textContent;
-      const fightLocation = Location?.textContent;
-      const remarks = Notes?.textContent;
-      //console.log(opponentName,serialNumber,fightResult,tally,foughtAgainst,winType,endRound,fightDate,fighterAge,fightLocation,remarks);
-
-      const boxerRecord = {
-        No: serialNumber,
-        Result: fightResult,
-        Record: tally,
-        Opponent: foughtAgainst,
-        Type: winType,
-        Round_Time: endRound,
-        Date: fightDate,
-        // Age: fighterAge,
-        Location: fightLocation,
-        Notes: remarks,
-      };
-      //console.log(boxerRecord);
-      record.push(boxerRecord);
-    }
-    //console.log(record);
-  }
-  const json = JSON.stringify(record);
-  const recordBoxer = url.split("https://en.wikipedia.org/wiki/");
-  fs.writeFileSync(`${recordBoxer}.json`, json.replace(/\\n/g, ""));
-  //console.log(json.replace(/\\n/g, ""));
+  fs.writeFileSync(
+    `./boxers/${fighterName.replaceAll(" ", "_")}.json`,
+    json.replace(/\\n/g, "")
+  );
 }
 
-//scrapeRecordTable();
+function parseRecord(fightingRecordTable) {
+  const [headings, ...rows] = fightingRecordTable.querySelectorAll("tr");
 
-async function scrapeChampions() {
+  let record = [];
+
+  for (row of rows) {
+    const match = parseMatchRow(row, headings);
+  }
+  return record;
+}
+
+//change the code here
+async function scrapeChampions(url) {
   const response = await axios.get(
     "https://en.wikipedia.org/wiki/List_of_world_middleweight_boxing_champions"
   );
@@ -147,26 +166,19 @@ async function scrapeChampions() {
       championTables.push(table);
     }
   }
-  //console.log(championTables.length);
-
   const champions = [];
   for (tableToScrape of championTables) {
     const [headings, ...rows] = tableToScrape.querySelectorAll("tr");
     for (row of rows) {
       const cells = row.querySelectorAll("td");
-      //console.log("cells", cells[2]?.textContent);
-      //console.log("titleRow", cells[3]?.textContent);
       const nameCell = cells[2];
       const linkCountries = nameCell?.querySelectorAll("a")[0];
       const link = nameCell?.querySelectorAll("a")[1];
-      //console.log("linkCOuntries", linkCountries?.href);
-      //console.log("link", link?.href);
       if (link) {
         champions.push(link?.href);
       }
     }
   }
-  //console.log(champions);
   for (const link of champions) {
     scrapeRecordTable(`https://en.wikipedia.org${link}`);
   }
