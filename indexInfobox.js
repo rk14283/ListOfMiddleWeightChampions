@@ -14,28 +14,33 @@ async function scrapeInfoBox(infoboxTable) {
   //console.log(tableData.textContent);
 
   const headings = infoboxTable.querySelectorAll("tr");
-  const boxerInfoBoxDataHeads = [];
+  const boxerInfoBoxData = [];
+
   for (heading of headings) {
     heads = heading?.querySelector(".infobox-label")?.textContent;
     data = heading.querySelector(".infobox-data")?.textContent;
+
     if (heads && data) {
-      console.log(heads, data);
+      //console.log(heads, data);
+      boxerInfoBoxData.push(heads, data);
     }
   }
 
-  // data = heading.querySelector(".infobox-data")?.textContent;
-  // if (heads && data) {
-  //   console.log(heads, data);
-  //   boxerInfoBoxDataHeads.push(heads);
-  // }
-  // console.log(boxerInfoBoxDataHeads);
-  //   }
-
-  //console.log(heads, data);
-
-  //return { tableHead: tableHead };
-
-  //try to get just one piece of data first
+  //does not work for all boxers
+  const InfoBoxRecord = {
+    "Weight(s)": boxerInfoBoxData[0],
+    Height: boxerInfoBoxData[1] + boxerInfoBoxData[2],
+    Born: boxerInfoBoxData[3],
+    Died: boxerInfoBoxData[4],
+    Stance: boxerInfoBoxData[5],
+    "Total fights": boxerInfoBoxData[6],
+    Wins: boxerInfoBoxData[7],
+    "Wins by KO": boxerInfoBoxData[8],
+    Losses: boxerInfoBoxData[9],
+    Draws: boxerInfoBoxData[10],
+  };
+  console.log(boxerInfoBoxData);
+  //console.log(InfoBoxRecord);
 }
 async function scrapeRecordTable(url) {
   //console.log("URL", url);
@@ -54,8 +59,22 @@ async function scrapeRecordTable(url) {
   //console.log(scrapeInfoBox(infoboxTable));
 }
 
-scrapeRecordTable("https://en.wikipedia.org/wiki/Marvelous_Marvin_Hagler");
+//scrapeRecordTable("https://en.wikipedia.org/wiki/Marvelous_Marvin_Hagler");
+scrapeRecordTable("https://en.wikipedia.org/wiki/John_Mugabi");
 
+// data = heading.querySelector(".infobox-data")?.textContent;
+// if (heads && data) {
+//   console.log(heads, data);
+//   boxerInfoBoxDataHeads.push(heads);
+// }
+// console.log(boxerInfoBoxDataHeads);
+//   }
+
+//console.log(heads, data);
+
+//return { tableHead: tableHead };
+
+//try to get just one piece of data first
 //   //console.log(infoBoxTable);
 //   //console.log(table);
 
