@@ -28,17 +28,17 @@ async function scrapeInfoBox(infoboxTable) {
 
   //does not work for all boxers
   const InfoBoxRecord = {
-    "Weight(s)": boxerInfoBoxData[0],
-    Height: boxerInfoBoxData[1] + boxerInfoBoxData[2],
-    Born: boxerInfoBoxData[3],
-    Died: boxerInfoBoxData[4],
-    Stance: boxerInfoBoxData[5],
-    "Total fights": boxerInfoBoxData[6],
-    Wins: boxerInfoBoxData[7],
-    "Wins by KO": boxerInfoBoxData[8],
-    Losses: boxerInfoBoxData[9],
-    Draws: boxerInfoBoxData[10],
-  };
+    Weight(s),
+    Height,
+    Born,
+    Died,
+    Stance,
+    totalFights,
+    Wins,
+    winsByKO,
+    Losses,
+    Draws
+  } = boxerInfoBoxData
   console.log(boxerInfoBoxData);
   //console.log(InfoBoxRecord);
 }
