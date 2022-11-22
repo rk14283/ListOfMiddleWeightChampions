@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
+//const scrapeInfoBox = require("./indexInfobox");
 
 function findRecordTable(tables) {
   //this function returns table with th
@@ -101,12 +102,24 @@ function parseInfoBox(infoboxTable) {
   const imageUrl = imageBox?.querySelector("img")?.src;
 
   // reach etc.. other stuff from infobox
+  const headings = infoboxTable.querySelectorAll("tr");
+  const boxerInfoBoxData = { imageUrl: imageUrl };
 
-  return { imageUrl: imageUrl };
+  for (heading of headings) {
+    heads = heading?.querySelector(".infobox-label")?.textContent;
+    data = heading.querySelector(".infobox-data")?.textContent;
+
+    if (heads && data) {
+      //console.log(heads, data);
+      boxerInfoBoxData[heads] = data;
+    }
+  }
+
+  return boxerInfoBoxData;
 }
 
 async function scrapeRecordTable(url) {
-  console.log("URL", url);
+  //console.log("URL", url);
   const response = await axios.get(url);
   const html = response.data;
   const jsdom = new JSDOM(html);
@@ -133,10 +146,7 @@ async function scrapeRecordTable(url) {
     record: record,
   });
 
-  fs.writeFileSync(
-    `./boxers/${fighterName.replaceAll(" ", "_")}.json`,
-    json.replace(/\\n/g, "")
-  );
+  fs.writeFileSync(`./boxers/${fighterName.replaceAll(" ", "_")}.json`, json);
 }
 
 function parseRecord(fightingRecordTable) {
@@ -146,6 +156,7 @@ function parseRecord(fightingRecordTable) {
 
   for (row of rows) {
     const match = parseMatchRow(row, headings);
+    record.push(match);
   }
   return record;
 }
