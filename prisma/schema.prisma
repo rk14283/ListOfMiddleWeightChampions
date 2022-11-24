@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model  Boxer{
+  id       Int     @id @default(autoincrement())
+  imageURL String?
+  name     String @unique
+  nickName String?
+  height   Int
+  reach    Int
+  born     DateTime? 
+  died     DateTime?
+  stance   String 
+  fights    Fight[]
+  fightsWon Fight[]@relation("winner")
+  weightCategories WeightCategory[]
+}
+
+model WeightCategory{
+  id        Int     @id @default(autoincrement())
+  boxers    Boxer[]
+  name      String
+}
+
+model Fight {
+  id        Int     @id @default(autoincrement())
+  boxers    Boxer[]
+  winner    Boxer?  @relation("winner",fields: [winnerId], references: [id])
+  winnerId  Int? 
+  outcome   String
+  roundTime String
+  date      DateTime
+  location  String
+  notes     String?
+
+}
