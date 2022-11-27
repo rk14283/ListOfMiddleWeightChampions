@@ -33,12 +33,14 @@ for (var i = 0; i < files.length; i++) {
 
 async function seed() {
   const boxers = [];
-  //console.log(files.length);
+
   for (var i = 0; i < files.length; i++) {
     const boxersRecord = fs.readFileSync(files[i]);
     //console.log(boxersRecord.toString("utf-8"));
-    readableBoxerRecord = boxersRecord.toString("utf-8");
+    readableBoxerRecord = JSON.parse(boxersRecord);
     var matchesHeight = readableBoxerRecord.Height;
+    var regExp = /\(([^)]+)\)/;
+    var matchesHeight = regExp.exec(readableBoxerRecord.Height);
     console.log(matchesHeight);
   }
 
