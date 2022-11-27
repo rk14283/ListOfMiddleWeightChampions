@@ -14,6 +14,8 @@ async function seed() {
   const dateOfBirth = boxer.Born;
   matchesDateOfBirth = dateOfBirth.match(/\(([^()]*)\)/)[1];
   dateTimeFormat = new Date(matchesDateOfBirth);
+
+  //console.log(matchesHeight);
   //console.log(dateTimeFormat);
 
   const inserted = await prisma.boxer.create({

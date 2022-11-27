@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Fight" ALTER COLUMN "date" SET DATA TYPE DATE;
