@@ -32,7 +32,24 @@ async function seed() {
     //console.log("this is Reach", Reach);
     //console.log("this is Reach", matchesReach);
     //5
-    let updatedReach = null;
+    let updatedHeight = 0;
+
+    if (readableBoxerRecord.Height && matchesHeight != null) {
+      // if (matchesHeight[1].includes("cm")) {
+      //   updatedHeight = parseInt(matchesHeight[1]);
+      // } else {
+      //   updatedHeight = parseFloat(matchesHeight[1]) * 100;
+      //   updatedHeight = Math.floor(updatedHeight);
+      // }
+      updatedHeight = parseInt(matchesHeight[1]);
+      // console.log(updatedHeight);
+      if (updatedHeight > 0 && updatedHeight < 10) {
+        updatedHeight = updatedHeight * 10;
+      }
+      //console.log(updatedHeight);
+    }
+
+    let updatedReach = 0;
     if (readableBoxerRecord.Reach && matchesReach) {
       function removeByIndex(str, index) {
         return str.slice(0, index) + str.slice(index + 1);
@@ -47,10 +64,10 @@ async function seed() {
       if (updatedReach > 200) {
         //there are 7 such cases
         //console.log("SOMETHING WENT WRONG", updatedReach);
-        //updatedReach = Math.floor(updatedReach * 2.54);
+        updatedReach = Math.floor((updatedReach / 100) * 2.54);
         //console.log("NUMBER:", updatedReach);
       }
-      console.log("NUMBER:", updatedReach);
+      // console.log("NUMBER:", updatedReach);
     }
 
     // function removeByIndex(str, index) {
@@ -75,21 +92,21 @@ async function seed() {
     //console.log(dateTimeFormat);
     //console.log(dateTimeFormatDeath);
 
-    // const inserted = await prisma.boxer.create({
-    //   data: {
-    //     imageURL: readableBoxerRecord.imageUrl?.substring(2),
-    //     name: readableBoxerRecord?.name,
-    //     nickName: readableBoxerRecord["Nickname(s)"]
-    //       ?.trim()
-    //       ?.replaceAll("\n", ", "),
-    //     height: parseInt(matchesHeight[1]),
-    //     reach: parseInt(updatedReach),
-    //     born: dateTimeFormat,
-    //     died: dateTimeFormatDeath,
-    //     stance: readableBoxerRecord.Stance,
-    //   },
-    // });
-    // console.log(inserted);
+    const inserted = await prisma.boxer.create({
+      data: {
+        imageURL: readableBoxerRecord.imageUrl?.substring(2),
+        name: readableBoxerRecord?.name,
+        nickName: readableBoxerRecord["Nickname(s)"]
+          ?.trim()
+          ?.replaceAll("\n", ", "),
+        height: updatedHeight,
+        reach: updatedReach,
+        born: dateTimeFormat,
+        died: dateTimeFormatDeath,
+        stance: readableBoxerRecord?.Stance,
+      },
+    });
+    console.log(inserted);
   }
 }
 
