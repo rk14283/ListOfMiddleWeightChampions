@@ -17,10 +17,14 @@ async function seed() {
     //const boxer = require("../../boxers/Thomas_Hearns.json");
     //console.log(boxer);
     const boxersRecord = fs.readFileSync(files[i]);
+
     const readableBoxerRecord = JSON.parse(boxersRecord);
+
+    if (readableBoxerRecord.Stance) {
+      updatedStance = readableBoxerRecord.Stance;
+    }
     const Height = readableBoxerRecord.Height;
     const Reach = readableBoxerRecord.Reach;
-
     const regExp = /\(([^)]+)\)/;
     ///Todo applyRegex to height
     const matchesReach = regExp.exec(readableBoxerRecord.Reach);
@@ -103,7 +107,7 @@ async function seed() {
         reach: updatedReach,
         born: dateTimeFormat,
         died: dateTimeFormatDeath,
-        stance: readableBoxerRecord?.Stance,
+        stance: updatedStance,
       },
     });
     console.log(inserted);
