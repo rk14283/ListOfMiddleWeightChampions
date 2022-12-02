@@ -15,11 +15,12 @@ model  Boxer{
   imageURL String?
   name     String @unique
   nickName String?
-  height   Int
-  reach    Int
+  formerChampion  Boolean @default(false)
+  height   Int?
+  reach    Int?
   born     DateTime? 
   died     DateTime?
-  stance   String 
+  stance   String? 
   fights    Fight[]
   fightsWon Fight[]@relation("winner")
   weightCategories WeightCategory[]
