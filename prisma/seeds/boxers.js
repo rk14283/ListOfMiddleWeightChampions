@@ -86,36 +86,55 @@ async function seed() {
 
   // console.log(lastFight.Type);
   //console.log(readableBoxerRecordTommyHearns.record[1].Type);
+  const regExp = /\(([^)]+)\)/;
+  const matchesReachTommy = regExp.exec(readableBoxerRecordTommyHearns.Reach);
+  const matchesHeightTommy = regExp.exec(readableBoxerRecordTommyHearns.Height);
 
+  const dateOfBirth = readableBoxerRecordTommyHearns?.Born;
+  const deathDate = readableBoxerRecordTommyHearns?.Died;
+  const matchesDateOfBirth = dateOfBirth?.match(/\(([^()]*)\)/);
+  const matchesDateOfDeath = deathDate?.match(/\(([^()]*)\)/);
+  const dateTimeFormat = new Date(matchesDateOfBirth);
+  let dateTimeFormatDeath = null;
+  if (matchesDateOfDeath) {
+    dateTimeFormatDeath = new Date(matchesDateOfDeath);
+  }
   for (var i = 0; i < tommyRecord.length; i++) {
     //console.log(tommyRecord[i]);
     for (record in tommyRecord[i]) {
       const Boxer = "Thomas Hearns";
+      const Opponent = tommyRecord[i][record].Opponent;
+      const boxers = [Boxer, Opponent];
       const Outcome = tommyRecord[i][record].Type;
       let winner = null;
       if (tommyRecord[i][record].Result === "Win\n") {
         winner = Boxer;
       } else {
-        winner = tommyRecord[i][record].Opponent;
+        winner = Opponent;
       }
       const roundTime = tommyRecord[i][record].Round_Time;
       const date = tommyRecord[i][record].Date;
       const location = tommyRecord[i][record].location;
 
       const notes = tommyRecord[i][record].Notes;
-      // console.log(
-      //   Boxer,
-      //   Outcome,
-      //   winner,
-      //   outcome,
-      //   roundTime,
-      //   date,
-      //   location,
-      //   notes
-      // );
-      const inserted = await prisma.boxer.create({
+
+      //console.log(boxers, Outcome, winner, roundTime, date, location, notes);
+      const inserted = await prisma.fight.create({
         data: {
-          boxers: Boxer,
+          imageURL: readableBoxerRecordTommyHearns.imageUrl?.substring(2),
+          name: readableBoxerRecordTommyHearns?.name,
+          nickName: readableBoxerRecordTommyHearns["Nickname(s)"]
+            ?.trim()
+            ?.replaceAll("\n", ", "),
+          formerChampion: true,
+          height: matchesHeightTommy,
+          reach: matchesReachTommy,
+          born: dateTimeFormat,
+          died: dateTimeFormatDeath,
+          stance: updatedStance,
+
+          Opponent,
+
           winner: winner,
           winnerId: null,
           outcome: Outcome,
