@@ -114,40 +114,39 @@ async function seed() {
       }
       const roundTime = tommyRecord[i][record].Round_Time;
       const date = tommyRecord[i][record].Date;
-      const location = tommyRecord[i][record].location;
+      const dateTimeFormat = new Date(date);
+      const location = tommyRecord[i][record].Location;
 
       const notes = tommyRecord[i][record].Notes;
+      if (notes) {
+        matchNote = notes;
+      }
 
-      //console.log(boxers, Outcome, winner, roundTime, date, location, notes);
+      //console.log(roundTime);
+      // console.log(
+      //   boxers,
+      //   Outcome,
+      //   winner,
+      //   roundTime,
+      //   dateTimeFormat,
+      //   location,
+      //   matchNote
+      // );
       const inserted = await prisma.fight.create({
         data: {
-          boxers:{
-          create: [  
-          imageURL: readableBoxerRecordTommyHearns.imageUrl?.substring(2),
-          name: readableBoxerRecordTommyHearns?.name,
-          nickName: readableBoxerRecordTommyHearns["Nickname(s)"]
-            ?.trim()
-            ?.replaceAll("\n", ", "),
-          formerChampion: true,
-          height: matchesHeightTommy,
-          reach: matchesReachTommy,
-          born: dateTimeFormat,
-          died: dateTimeFormatDeath,
-          stance: updatedStance,
-          fights:    tommyRecord[i][record]
-          fightsWon 
-          weightCategories WeightCategory[]
+          boxers: {
+            connect: {
+              id: 560,
+            },
+          },
 
-          
-        }
-          winner: winner,
-          winnerId: null,
+          winner: boxers.id,
+          winnerId: boxers.id,
           outcome: Outcome,
-          roundtimne: roundTime,
-          date: date,
+          roundTime: roundTime,
+          date: dateTimeFormat,
           location: location,
-          notes: notes,
-      
+          notes: matchNote,
         },
       });
       console.log(inserted);
@@ -179,8 +178,8 @@ async function seed() {
 //   "Notes": "\n"
 // }
 
-//Step 0: Get the ID of main boxer from the database
-//Step 1: check if the opponent is in database
+//Step 0: Get the ID of main boxer from the database (ID 560)
+//Step 1: check if the opponent is in database (No most opponenets are not)
 //>If opponent is in database we get the ID
 //>If the opponent is not in database we insert the opponent
 //Step 2: Determine the winner ID
@@ -213,5 +212,21 @@ async function seed() {
 //   notes     String?
 
 // }
+
+//create: [
+//     imageURL: readableBoxerRecordTommyHearns.imageUrl?.substring(2),
+//     name: readableBoxerRecordTommyHearns?.name,
+//     nickName: readableBoxerRecordTommyHearns["Nickname(s)"]
+//       ?.trim()
+//       ?.replaceAll("\n", ", "),
+//     formerChampion: true,
+//     height: matchesHeightTommy,
+//     reach: matchesReachTommy,
+//     born: dateTimeFormat,
+//     died: dateTimeFormatDeath,
+//     stance: updatedStance,
+//     fights:    tommyRecord[i][record]
+//     fightsWon
+//     weightCategories WeightCategory[]
 
 seed();
