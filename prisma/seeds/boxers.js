@@ -121,6 +121,8 @@ async function seed() {
       //console.log(boxers, Outcome, winner, roundTime, date, location, notes);
       const inserted = await prisma.fight.create({
         data: {
+          boxers:{
+          create: [  
           imageURL: readableBoxerRecordTommyHearns.imageUrl?.substring(2),
           name: readableBoxerRecordTommyHearns?.name,
           nickName: readableBoxerRecordTommyHearns["Nickname(s)"]
@@ -132,9 +134,12 @@ async function seed() {
           born: dateTimeFormat,
           died: dateTimeFormatDeath,
           stance: updatedStance,
+          fights:    tommyRecord[i][record]
+          fightsWon 
+          weightCategories WeightCategory[]
 
-          Opponent,
-
+          
+        }
           winner: winner,
           winnerId: null,
           outcome: Outcome,
@@ -142,6 +147,7 @@ async function seed() {
           date: date,
           location: location,
           notes: notes,
+      
         },
       });
       console.log(inserted);
