@@ -108,9 +108,9 @@ async function seed() {
       const Outcome = tommyRecord[i][record].Type;
       let winner = null;
       if (tommyRecord[i][record].Result === "Win\n") {
-        winner = Boxer;
+        winner = 560;
       } else {
-        winner = Opponent;
+        winner = 0;
       }
       const roundTime = tommyRecord[i][record].Round_Time;
       const date = tommyRecord[i][record].Date;
@@ -136,7 +136,7 @@ async function seed() {
         data: {
           boxers: {
             connect: {
-              id: 560,
+              id: 665,
             },
           },
 
