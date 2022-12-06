@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { PrismaClient } = require("@prisma/client");
+const { Console } = require("console");
 
 const prisma = new PrismaClient();
 let directroy = "boxers";
@@ -9,11 +10,32 @@ for (var i = 0; i < files.length; i++) {
   files[i] = "boxers/" + files[i];
 }
 
-async function seed() {
+async function seedChampions() {
   for (var i = 0; i < files.length; i++) {
     const boxersRecord = fs.readFileSync(files[i]);
     const readableBoxerRecord = JSON.parse(boxersRecord);
 
+    const fightRecord = readableBoxerRecord.record;
+    //console.log(fightRecord);
+    let opponentArray = [];
+
+    //console.log(opponentArray);
+    const boxerName = readableBoxerRecord.name;
+    // console.log(boxerName);
+
+    for (fight of fightRecord) {
+      //console.log(fight.Opponent);
+      opponentArray = fight.Opponent.trim();
+
+      //console.log("name of the opponent", fight.Opponent.trim());
+      //opponentArray = fight.Opponent.trim();
+      ////outside the loop it is only printing Al hostak
+      // opponentArray.push(fight.Opponent.trim());
+      console.log("inside the loop", opponentArray);
+    }
+    console.log("outside the loop", opponentArray);
+
+    //console.log(opponentArray);
     if (readableBoxerRecord.Stance) {
       updatedStance = readableBoxerRecord.Stance;
     }
@@ -70,101 +92,103 @@ async function seed() {
     // console.log(inserted);
   }
   //JSON file of tommy hearns, insert only tommy hearn's record
-  let filePathTommyHearns = "boxers/Thomas_Hearns.json";
+  // let filePathTommyHearns = "boxers/Thomas_Hearns.json";
 
-  const boxersRecordTommyHearns = fs.readFileSync(filePathTommyHearns);
+  // const boxersRecordTommyHearns = fs.readFileSync(filePathTommyHearns);
 
-  const readableBoxerRecordTommyHearns = JSON.parse(boxersRecordTommyHearns);
-  //console.log(readableBoxerRecordTommyHearns);
-  //console.log(readableBoxerRecordTommyHearns.record);
+  // const readableBoxerRecordTommyHearns = JSON.parse(boxersRecordTommyHearns);
+  // //console.log(readableBoxerRecordTommyHearns);
+  // //console.log(readableBoxerRecordTommyHearns.record);
 
-  const tommyRecord = [];
-  tommyRecord.push(readableBoxerRecordTommyHearns.record);
-  //console.log(readableBoxerRecordTommyHearns.record);
+  // const tommyRecord = [];
+  // tommyRecord.push(readableBoxerRecordTommyHearns.record);
+  // //console.log(readableBoxerRecordTommyHearns.record);
 
-  //lastFight = tommyRecord[0][1];
+  // //lastFight = tommyRecord[0][1];
 
-  // console.log(lastFight.Type);
-  //console.log(readableBoxerRecordTommyHearns.record[1].Type);
-  const regExp = /\(([^)]+)\)/;
-  const matchesReachTommy = regExp.exec(readableBoxerRecordTommyHearns.Reach);
-  const matchesHeightTommy = regExp.exec(readableBoxerRecordTommyHearns.Height);
+  // // console.log(lastFight.Type);
+  // //console.log(readableBoxerRecordTommyHearns.record[1].Type);
+  // const regExp = /\(([^)]+)\)/;
+  // const matchesReachTommy = regExp.exec(readableBoxerRecordTommyHearns.Reach);
+  // const matchesHeightTommy = regExp.exec(readableBoxerRecordTommyHearns.Height);
 
-  const dateOfBirth = readableBoxerRecordTommyHearns?.Born;
-  const deathDate = readableBoxerRecordTommyHearns?.Died;
-  const matchesDateOfBirth = dateOfBirth?.match(/\(([^()]*)\)/);
-  const matchesDateOfDeath = deathDate?.match(/\(([^()]*)\)/);
-  const dateTimeFormat = new Date(matchesDateOfBirth);
-  let dateTimeFormatDeath = null;
-  if (matchesDateOfDeath) {
-    dateTimeFormatDeath = new Date(matchesDateOfDeath);
-  }
-  for (var i = 0; i < tommyRecord.length; i++) {
-    //console.log(tommyRecord[i]);
-    for (record in tommyRecord[i]) {
-      const Boxer = "Thomas Hearns";
-      const Opponent = tommyRecord[i][record].Opponent;
-      const boxers = [Boxer, Opponent];
-      const Outcome = tommyRecord[i][record].Type;
-      let winner = null;
-      if (tommyRecord[i][record].Result === "Win\n") {
-        winner = 560;
-      } else {
-        winner = 0;
-      }
-      const roundTime = tommyRecord[i][record].Round_Time;
-      const date = tommyRecord[i][record].Date;
-      const dateTimeFormat = new Date(date);
-      const location = tommyRecord[i][record].Location;
+  // const dateOfBirth = readableBoxerRecordTommyHearns?.Born;
+  // const deathDate = readableBoxerRecordTommyHearns?.Died;
+  // const matchesDateOfBirth = dateOfBirth?.match(/\(([^()]*)\)/);
+  // const matchesDateOfDeath = deathDate?.match(/\(([^()]*)\)/);
+  // const dateTimeFormat = new Date(matchesDateOfBirth);
+  // let dateTimeFormatDeath = null;
+  // if (matchesDateOfDeath) {
+  //   dateTimeFormatDeath = new Date(matchesDateOfDeath);
+  // }
+  // for (var i = 0; i < tommyRecord.length; i++) {
+  //   //console.log(tommyRecord[i]);
+  //   for (record in tommyRecord[i]) {
+  //     const Boxer = "Thomas Hearns";
+  //     const Opponent = tommyRecord[i][record].Opponent;
+  //     const boxers = [Boxer, Opponent];
+  //     const Outcome = tommyRecord[i][record].Type;
+  //     let winner = null;
+  //     if (tommyRecord[i][record].Result === "Win\n") {
+  //       winner = 560;
+  //     } else {
+  //       winner = 0;
+  //     }
+  //     const roundTime = tommyRecord[i][record].Round_Time;
+  //     const date = tommyRecord[i][record].Date;
+  //     const dateTimeFormat = new Date(date);
+  //     const location = tommyRecord[i][record].Location;
 
-      const notes = tommyRecord[i][record].Notes;
-      if (notes) {
-        matchNote = notes;
-      }
+  //     const notes = tommyRecord[i][record].Notes;
+  //     if (notes) {
+  //       matchNote = notes;
+  //   }
 
-      //console.log(roundTime);
-      // console.log(
-      //   boxers,
-      //   Outcome,
-      //   winner,
-      //   roundTime,
-      //   dateTimeFormat,
-      //   location,
-      //   matchNote
-      // );
-      const inserted = await prisma.fight.create({
-        data: {
-          boxers: {
-            connect: {
-              id: 665,
-            },
-          },
+  //console.log(roundTime);
+  // console.log(
+  //   boxers,
+  //   Outcome,
+  //   winner,
+  //   roundTime,
+  //   dateTimeFormat,
+  //   location,
+  //   matchNote
+  // );
+  //   const inserted = await prisma.fight.create({
+  //     data: {
+  //       boxers: {
+  //         connect: {
+  //           id: 665,
+  //         },
+  //       },
 
-          winner: boxers.id,
-          winnerId: boxers.id,
-          outcome: Outcome,
-          roundTime: roundTime,
-          date: dateTimeFormat,
-          location: location,
-          notes: matchNote,
-        },
-      });
-      console.log(inserted);
-    }
-  }
-  // const inserted = await prisma.boxer.create({
-  //   dataTommyHearns: {
-  //     boxers:readableBoxerRecordTommyHearns,
-  //     winner: readableBoxerRecordTommyHearns,
-  //     winnerId: null,
-  //     outcome: updatedHeight,
-  //     roundtimne: updatedReach,
-  //     date: dateTimeFormat,
-  //     location: dateTimeFormatDeath,
-  //     notes: updatedStance,
-  //   },
-  // });
+  //       winner: boxers.id,
+  //       winnerId: boxers.id,
+  //       outcome: Outcome,
+  //       roundTime: roundTime,
+  //       date: dateTimeFormat,
+  //       location: location,
+  //       notes: matchNote,
+  //     },
+  //   });
+  //   console.log(inserted);
+  // }
 }
+
+seedChampions();
+// const inserted = await prisma.boxer.create({
+//   dataTommyHearns: {
+//     boxers:readableBoxerRecordTommyHearns,
+//     winner: readableBoxerRecordTommyHearns,
+//     winnerId: null,
+//     outcome: updatedHeight,
+//     roundtimne: updatedReach,
+//     date: dateTimeFormat,
+//     location: dateTimeFormatDeath,
+//     notes: updatedStance,
+//   },
+// });
+//}
 
 // {
 //   "No": "67\n",
@@ -178,8 +202,10 @@ async function seed() {
 //   "Notes": "\n"
 // }
 
-//Step 0: Get the ID of main boxer from the database (ID 560)
-//Step 1: check if the opponent is in database (No most opponenets are not)
+//Step 0:Require JSON
+//> Get the ID of main boxer from the database (ID 560)
+//Step 1: Loop through the record,
+//>for each fight check if the opponent is in database (No most opponenets are not)
 //>If opponent is in database we get the ID
 //>If the opponent is not in database we insert the opponent
 //Step 2: Determine the winner ID
@@ -229,4 +255,30 @@ async function seed() {
 //     fightsWon
 //     weightCategories WeightCategory[]
 
-seed();
+//seed();
+
+async function seedRecords() {
+  let filePathTommyHearns = "boxers/Thomas_Hearns.json";
+  const boxersRecordTommyHearns = fs.readFileSync(filePathTommyHearns);
+
+  const readableBoxerRecordTommyHearns = JSON.parse(boxersRecordTommyHearns);
+  const mainBoxer = await prisma.boxer.findUnique({
+    where: {
+      name: readableBoxerRecordTommyHearns.name,
+    },
+  });
+  //console.log(mainBoxer);
+
+  for (fight of readableBoxerRecordTommyHearns.record) {
+    console.log("name of the opponent", fight.Opponent.trim());
+
+    const opponentBoxer = await prisma.boxer.findUnique({
+      where: {
+        name: fight.Opponent.trim(),
+      },
+    });
+    console.log("logging opponet from DB", opponentBoxer);
+  }
+}
+
+//seedRecords();
