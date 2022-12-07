@@ -291,7 +291,7 @@ async function seedRecords() {
     }
 
     trimmedResult = fight.Result.trim();
-    let winnerID = 0;
+    let winnerID = null;
     let winnerName = null;
 
     if (trimmedResult === "Win") {
@@ -315,14 +315,14 @@ async function seedRecords() {
             name: opponentBoxer.name,
           },
 
-          winner: winnerName,
-          winnerId: winnerID,
-          outcome: Outcome,
-          roundTime: roundTime,
-          date: dateTimeFormat,
-          location: location,
-          notes: notes,
+          //winner: winnerName,
         },
+        winnerId: winnerID,
+        outcome: Outcome,
+        roundTime: roundTime,
+        date: dateTimeFormat,
+        location: location,
+        notes: notes,
       },
     });
     console.log(insertedNameIDs);
