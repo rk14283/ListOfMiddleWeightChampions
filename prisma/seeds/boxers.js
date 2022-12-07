@@ -11,29 +11,27 @@ for (var i = 0; i < files.length; i++) {
 }
 
 async function seedChampions() {
+  let opponentArray = [];
   for (var i = 0; i < files.length; i++) {
     const boxersRecord = fs.readFileSync(files[i]);
     const readableBoxerRecord = JSON.parse(boxersRecord);
 
     const fightRecord = readableBoxerRecord.record;
     //console.log(fightRecord);
-    let opponentArray = [];
-
     //console.log(opponentArray);
     const boxerName = readableBoxerRecord.name;
     // console.log(boxerName);
 
     for (fight of fightRecord) {
       //console.log(fight.Opponent);
-      opponentArray = fight.Opponent.trim();
+      //opponentArray = fight.Opponent.trim();
 
       //console.log("name of the opponent", fight.Opponent.trim());
       //opponentArray = fight.Opponent.trim();
       ////outside the loop it is only printing Al hostak
-      // opponentArray.push(fight.Opponent.trim());
-      console.log("inside the loop", opponentArray);
+      opponentArray.push(fight.Opponent.trim());
+      //  console.log("inside the loop", opponentArray);
     }
-    console.log("outside the loop", opponentArray);
 
     //console.log(opponentArray);
     if (readableBoxerRecord.Stance) {
@@ -74,23 +72,25 @@ async function seedChampions() {
       dateTimeFormatDeath = new Date(matchesDateOfDeath);
     }
 
-    // const inserted = await prisma.boxer.create({
-    //   data: {
-    //     imageURL: readableBoxerRecord.imageUrl?.substring(2),
-    //     name: readableBoxerRecord?.name,
-    //     nickName: readableBoxerRecord["Nickname(s)"]
-    //       ?.trim()
-    //       ?.replaceAll("\n", ", "),
-    //     formerChampion: true,
-    //     height: updatedHeight,
-    //     reach: updatedReach,
-    //     born: dateTimeFormat,
-    //     died: dateTimeFormatDeath,
-    //     stance: updatedStance,
-    //   },
-    // });
-    // console.log(inserted);
+    const inserted = await prisma.boxer.create({
+      data: {
+        imageURL: readableBoxerRecord.imageUrl?.substring(2),
+        name: readableBoxerRecord?.name,
+        nickName: readableBoxerRecord["Nickname(s)"]
+          ?.trim()
+          ?.replaceAll("\n", ", "),
+        formerChampion: true,
+        height: updatedHeight,
+        reach: updatedReach,
+        born: dateTimeFormat,
+        died: dateTimeFormatDeath,
+        stance: updatedStance,
+      },
+    });
+    console.log(inserted);
   }
+
+  //  console.log("outside the loop", opponentArray);
   //JSON file of tommy hearns, insert only tommy hearn's record
   // let filePathTommyHearns = "boxers/Thomas_Hearns.json";
 
@@ -175,7 +175,7 @@ async function seedChampions() {
   // }
 }
 
-seedChampions();
+//seedChampions();
 // const inserted = await prisma.boxer.create({
 //   dataTommyHearns: {
 //     boxers:readableBoxerRecordTommyHearns,
@@ -255,7 +255,7 @@ seedChampions();
 //     fightsWon
 //     weightCategories WeightCategory[]
 
-//seed();
+//seedChampions();
 
 async function seedRecords() {
   let filePathTommyHearns = "boxers/Thomas_Hearns.json";
@@ -267,18 +267,76 @@ async function seedRecords() {
       name: readableBoxerRecordTommyHearns.name,
     },
   });
-  //console.log(mainBoxer);
+  //console.log(mainBoxer.id);
 
   for (fight of readableBoxerRecordTommyHearns.record) {
-    console.log("name of the opponent", fight.Opponent.trim());
+    //console.log("name of the opponent", fight.Opponent.trim());
+    const roundTime = fight.Round_Time;
+    const date = fight.Date;
+    const dateTimeFormat = new Date(date);
+    const Outcome = fight.Type;
+    const location = fight.Location;
 
-    const opponentBoxer = await prisma.boxer.findUnique({
+    const notes = fight.Notes;
+    //console.log(Outcome, roundTime, dateTimeFormat, location, notes);
+    let opponentBoxer = await prisma.boxer.findUnique({
       where: {
         name: fight.Opponent.trim(),
       },
     });
-    console.log("logging opponet from DB", opponentBoxer);
+    //console.log(fight.Result.trim());
+
+    if (notes) {
+      matchNote = notes;
+    }
+
+    trimmedResult = fight.Result.trim();
+    let winnerID = 0;
+    let winnerName = null;
+
+    if (trimmedResult === "Win") {
+      winnerID = mainBoxer.id;
+      winnerName = readableBoxerRecordTommyHearns.name;
+
+      //   //console.log("Tommy won", winnerID, winnerName);
+    } else if (trimmedResult === "Loss") {
+      winnerID = opponentBoxer.id;
+      winnerName = opponentBoxer.name;
+      //   // console.log("Tommy lost", winnerID, winnerName);
+    } else {
+      //console.log("It is a draw", winnerID);
+    }
+    // console.log(notes);
+    const insertedNameIDs = await prisma.fight.create({
+      data: {
+        boxers: {
+          connect: {
+            name: readableBoxerRecordTommyHearns.name,
+            name: opponentBoxer.name,
+          },
+
+          winner: winnerName,
+          winnerId: winnerID,
+          outcome: Outcome,
+          roundTime: roundTime,
+          date: dateTimeFormat,
+          location: location,
+          notes: notes,
+        },
+      },
+    });
+    console.log(insertedNameIDs);
+
+    //console.log(opponentBoxer.id);
+    // if (!opponentBoxer) {
+    //   opponentBoxer = await prisma.boxer.create({
+    //     data: {
+    //       name: fight.Opponent.trim(),
+    //       formerChampion: false,
+    //     },
+    //   });
+    // }
+    // console.log("logging opponet from DB", opponentBoxer);
   }
 }
-
-//seedRecords();
+seedRecords();
