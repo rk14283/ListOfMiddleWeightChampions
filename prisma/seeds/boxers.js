@@ -134,6 +134,28 @@ async function seedRecords() {
             },
           });
         }
+        //1:look inside database for fight with same boxers and the same date
+        let duplicateFight = await prisma.fight.findFirst({
+          where: {
+            boxers: {
+              every: {
+                //where all ids are in this array
+                id: { in: [mainBoxer.id, opponent.id] },
+              },
+            },
+            date: dateTimeFormat,
+          },
+        });
+
+        //console.log(matchDate);
+        // console.log(duplicateFight);
+
+        if (duplicateFight) {
+          console.log("duplicate");
+          continue;
+        }
+        //2: If this fight exists we continue
+
         let winnerID = null;
         let winnerName = null;
         if (trimmedResult === "Win") {
@@ -143,13 +165,23 @@ async function seedRecords() {
           winnerID = opponent.id;
           winnerName = opponent.name;
         }
+        console.log(
+          "This is main boxer name",
+          mainBoxer.name,
+          "This is the opponent name",
+          opponent.name
+        );
         const insertedNameIDs = await prisma.fight.create({
           data: {
             boxers: {
-              connect: {
-                name: mainBoxer.name,
-                name: opponent.name,
-              },
+              connect: [
+                {
+                  name: mainBoxer.name,
+                },
+                {
+                  name: opponent.name,
+                },
+              ],
             },
             winnerId: winnerID,
             outcome: outcome,
@@ -159,7 +191,7 @@ async function seedRecords() {
             notes: notes,
           },
         });
-        console.log(insertedNameIDs);
+        //console.log(insertedNameIDs);
       } catch (error) {
         console.log(error, "This entry did not work", fight);
       }
@@ -167,3 +199,5 @@ async function seedRecords() {
   }
 }
 seedRecords();
+
+//Problem with seeding weight is that opponent does not always have a weight
