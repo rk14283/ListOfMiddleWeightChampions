@@ -198,6 +198,6 @@ async function seedRecords() {
     }
   }
 }
-seedRecords();
+//seedRecords();
 
 //Problem with seeding weight is that opponent does not always have a weight
