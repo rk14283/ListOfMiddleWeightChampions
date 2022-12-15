@@ -55,6 +55,7 @@ async function queryingBoxersAgainstChampions() {
   let oneBoxerId = oneBoxerName.id;
   let x = 9963;
   for (let i = 9858; i < 9963; i++) {
+    let championFights = [];
     let opponents = await prisma.fight.findMany({
       where: {
         boxers: {
@@ -75,8 +76,16 @@ async function queryingBoxersAgainstChampions() {
     for (var key in opponents) {
       //if (opponents[key] !== undefined && opponents[key].length === 0)
       if (opponents[key].length != 0) {
-        console.log(opponents);
+        //Array contains all the champions  Tommy has fought
+        championFights.push(opponents);
+        //if winnerid is 9956 then Tommy has won
+        for (opponent of opponents) {
+          if (opponent.winnerId === oneBoxerId) {
+            console.log(opponents);
+          }
+        }
       }
+      //console.log(championFights);
     }
   }
 }
