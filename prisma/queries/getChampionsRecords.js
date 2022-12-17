@@ -75,9 +75,10 @@ async function queryingBoxersAgainstChampions() {
     //console.log(opponents);
     for (var key in opponents) {
       //if (opponents[key] !== undefined && opponents[key].length === 0)
-      if (opponents[key].length != 0) {
+      if (opponents[key].length != 0 && opponents[key] !== undefined) {
         //Array contains all the champions  Tommy has fought
         championFights.push(opponents);
+        //console.log(championFights);
         //if winnerid is 9956 then Tommy has won
         for (opponent of opponents) {
           if (opponent.winnerId === oneBoxerId) {
@@ -85,142 +86,126 @@ async function queryingBoxersAgainstChampions() {
           }
         }
       }
-      //console.log(championFights);
     }
   }
 }
 
-queryingBoxersAgainstChampions();
+async function queryingChampionRecords(name) {
+  let oneBoxerByName = await prisma.boxer.findUnique({
+    where: {
+      name,
+    },
+    include: {
+      fightsWon: {
+        where: {
+          boxers: {
+            every: {
+              formerChampion: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  console.log(oneBoxerByName.fightsWon.length);
+}
+//queryingChampionRecords("Sugar Ray Robinson");
 
-////sugarrayleonard vs Tommy hearns
-// let opponents = await prisma.fight.findMany({
-//     where: {
-//       boxers: {
-//         ////some, every,none, every with ray leonard, I get one fight
-//         every: {
-//           id: { in: [9956, 9951] },
-//         },
-//       },
-//     },
-//   });
-//   console.log(opponents);
+async function fightsWonByKo(name) {
+  let winnerByKo = await prisma.boxer.findUnique({
+    where: {
+      name,
+    },
+    include: {
+      fights: {
+        where: {
+          winner: {
+            name,
+          },
+          outcome: { contains: "KO" },
+        },
+      },
+    },
+  });
+  console.log(winnerByKo);
+  console.log(winnerByKo.fights.length);
+  //result of this is 107 but in reality it is 109
+  //bug: it is showing 2 less, for both Hearns and Robinson
+}
 
-// let x = 9963;
-// for (let i = 9858; i < 9963; i++) {
-//   console.log(i + ",");
-// }
+//fightsWonByKo("Thomas Hearns");
 
-// 9858,
-//                 9859,
-//                 9860,
-//                 9861,
-//                 9862,
-//                 9863,
-//                 9864,
-//                 9865,
-//                 9866,
-//                 9867,
-//                 9868,
-//                 9869,
-//                 9870,
-//                 9871,
-//                 9872,
-//                 9873,
-//                 9874,
-//                 9875,
-//                 9876,
-//                 9877,
-//                 9878,
-//                 9879,
-//                 9880,
-//                 9881,
-//                 9882,
-//                 9883,
-//                 9884,
-//                 9885,
-//                 9886,
-//                 9887,
-//                 9888,
-//                 9889,
-//                 9890,
-//                 9891,
-//                 9892,
-//                 9893,
-//                 9894,
-//                 9895,
-//                 9896,
-//                 9897,
-//                 9898,
-//                 9899,
-//                 9900,
-//                 9901,
-//                 9902,
-//                 9903,
-//                 9904,
-//                 9905,
-//                 9906,
-//                 9907,
-//                 9908,
-//                 9909,
-//                 9910,
-//                 9911,
-//                 9912,
-//                 9913,
-//                 9914,
-//                 9915,
-//                 9916,
-//                 9917,
-//                 9918,
-//                 9919,
-//                 9920,
-//                 9921,
-//                 9922,
-//                 9923,
-//                 9924,
-//                 9925,
-//                 9926,
-//                 9927,
-//                 9928,
-//                 9929,
-//                 9930,
-//                 9931,
-//                 9932,
-//                 9933,
-//                 9934,
-//                 9935,
-//                 9936,
-//                 9937,
-//                 9938,
-//                 9939,
-//                 9940,
-//                 9941,
-//                 9942,
-//                 9943,
-//                 9944,
-//                 9945,
-//                 9946,
-//                 9947,
-//                 9948,
-//                 9949,
-//                 9950,
-//                 9951,
-//                 9952,
-//                 9953,
-//                 9954,
-//                 9955,
-//                 9956,
-//                 9957,
-//                 9958,
-//                 9959,
-//                 9960,
-//                 9961,
-//                 9962,
+async function fightsWonByKo(id) {
+  let wentTheDistance = await prisma.boxer.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      fights: {
+        where: {
+          winner: {
+            id,
+          },
+          NOT: {
+            outcome: { contains: "KO" },
+          },
+        },
+      },
+    },
+  });
+  console.log(wentTheDistance);
+  console.log(wentTheDistance.fights.length);
+  //bug it shows two extra by decesion
+}
+//fightsWonByKo(9956);
 
-// const isEmpty = Object.keys(opponents).length === 0;
-//   console.log(isEmpty);
+//count of all the wins by a boxer
+async function countWins(name) {
+  const boxerWinCount = await prisma.boxer.findUnique({
+    //include is for related records
+    //select specific field from a related record
+    where: {
+      //I do this I get boxer's info without the fight
+      name,
+    },
+    select: {
+      _count: {
+        //I broke it down to bare bones steps and then final part was a guess
+        select: {
+          //fights of sugar Ray
+          fightsWon: true,
+          //fights, false and height true returns height
+        },
+      },
+    },
+  });
+  console.log(boxerWinCount);
+}
 
-// for(var key in obj){
-//     if(obj[key]!==undefined && obj[key].length===0){
-//         obj[key] = [""];
-//     }
-//    }
+//countWins("Sugar Ray Robinson");
+//countWins("Thomas Hearns");
+
+async function countFights(name) {
+  const boxerFightCount = await prisma.boxer.findUnique({
+    //include is for related records
+    //select specific field from a related record
+    where: {
+      //I do this I get boxer's info without the fight
+      name,
+    },
+    select: {
+      _count: {
+        //I broke it down to bare bones steps and then final part was a guess
+        select: {
+          //fights of sugar Ray
+          fights: true,
+          //fights, false and height true returns height
+        },
+      },
+    },
+  });
+  console.log(boxerFightCount);
+}
+
+countFights("Sugar Ray Robinson");
+countFights("Thomas Hearns");
