@@ -207,8 +207,12 @@ async function countFights(name) {
   console.log(boxerFightCount);
 }
 
-//countFights("Sugar Ray Robinson");
-//countFights("Thomas Hearns");
+countFights("Sugar Ray Robinson");
+countFights("Thomas Hearns");
+
+
+
+//GETTING OUTCOMES
 
 async function countWinsByKO(name) {
   const boxerFightCountByKO = await prisma.boxer.findUnique({
@@ -233,3 +237,4 @@ async function countWinsByKO(name) {
 }
 
 countWinsByKO("Sugar Ray Robinson");
+
