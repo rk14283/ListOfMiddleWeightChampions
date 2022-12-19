@@ -122,7 +122,16 @@ async function fightsWonByKo(name) {
           winner: {
             name,
           },
-          outcome: { contains: "KO" },
+          OR: [
+            {
+              outcome: {
+                contains: "KO",
+              },
+            },
+            {
+              outcome: { contains: "RTD" },
+            },
+          ],
         },
       },
     },
@@ -131,24 +140,34 @@ async function fightsWonByKo(name) {
   console.log(winnerByKo.fights.length);
   //result of this is 107 but in reality it is 109
   //bug: it is showing 2 less, for both Hearns and Robinson
+  //validation error means input not acceptable, validation is process of checking is input acceptable
 }
 
 //fightsWonByKo("Thomas Hearns");
+//fightsWonByKo("Sugar Ray Robinson");
 
-async function fightsWonByKo(id) {
+async function findFightsWonByDecesionByName(name) {
   let wentTheDistance = await prisma.boxer.findUnique({
     where: {
-      id,
+      name,
     },
     include: {
       fights: {
         where: {
           winner: {
-            id,
+            name,
           },
-          NOT: {
-            outcome: { contains: "KO" },
-          },
+          NOT: [
+            {
+              outcome: { contains: "KO" },
+            },
+            {
+              outcome: { contains: "RTD" },
+            },
+            {
+              outcome: { contains: "NC" },
+            },
+          ],
         },
       },
     },
@@ -157,7 +176,7 @@ async function fightsWonByKo(id) {
   console.log(wentTheDistance.fights.length);
   //bug it shows two extra by decesion
 }
-//fightsWonByKo(9956);
+//findFightsWonByDecesionByName("Sugar Ray Robinson");
 
 //count of all the wins by a boxer
 async function countWins(name) {
@@ -232,4 +251,4 @@ async function countWinsByKO(name) {
   console.log(boxerFightCountByKO);
 }
 
-countWinsByKO("Sugar Ray Robinson");
+//countWinsByKO("Sugar Ray Robinson");
