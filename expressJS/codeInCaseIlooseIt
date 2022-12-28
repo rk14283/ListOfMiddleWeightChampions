@@ -1,0 +1,30 @@
+<select>
+  <option>select a champion</option>
+  <% for (boxerName of boxerNames){ %>
+  <option><%=boxerName.name%></option>
+  <% } %>
+</select>
+
+<button>BOX</button>
+<select>
+  <option>select a champion</option>
+  <% for (boxerName of boxerNames){ %>
+  <option><%=boxerName.name%></option>
+  <% } %>
+</select>
+
+version 2: Drop down list 
+
+<label for="champion-one">Select a champion:</label>
+<input list="list-of-champions" id="champion-one" name="champion-one" />
+
+<button>BOX</button>
+<label for="champion-two">Select a champion:</label>
+<input list="list-of-champions" id="champion-two" name="champion-two" />
+<datalist id="list-of-champions">
+  <% for (boxerName of boxerNames){ %>
+
+  <option data-value="<%=boxerName.id%>"><%=boxerName.name%></option>
+  <% } %>
+</datalist>
+

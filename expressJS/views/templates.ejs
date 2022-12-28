@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Of Middleweight Champions</title>
+  </head>
+  <body>
+    <button id="get-btn">Get a boxer</button>
+    <label>
+      select a champion
+      <select id="filters">
+        <option><%=boxerName.name%></option>
+      </select>
+    </label>
+    <!--Now if I click the button all the stuff goes up and image disspears-->
+    <img src="" id="tommy" />
+  </body>
+
+  <script>
+    // 1. HTML element to click
+    // 2. Select the HTML element in our code
+    const button = document.getElementById("get-btn");
+    // 3. Add an event handler to an event listener
+    // event listener: .onclick
+    // handler: a function
+
+    button.onclick = async function () {
+      //console.log("I GOT CLICKED")
+
+      // 4. Event handler performs some kind of action (change the page)
+      //const dropdown = document.getElementById("filters")
+      //console.log("DROPDOWN!", dropdown.value)
+
+      // 5. We need to get a url from somewhere (api)
+      //get object Tommy Hearns, and then in that you have to get imageURL
+
+      const response = await fetch(
+        `http://localhost:9000/api/boxers/:name/json`
+      );
+
+      //error is saying that you are recieving HTML instead of JSON
+
+      const json = await response.json();
+      //console.log(json)
+
+      // 6. Select the image HTML element
+      //here is where all the problem started
+      const imageElement = document.getElementById("tommy");
+
+      //console.log(json.imageURL)
+      //stringImage = JSON.stringify(json.imageURL)
+      //if (imageElement === null) {
+      //console.log("it is null")
+
+      // imageElement = "https://" + json.imageURL;
+      //  }
+      // 7. Change the attributes of the image+
+      imageElement.src = "https://" + json.imageURL;
+      //console.log(stringImage)
+      console.log("CHECK FOR ICECBE!", imageElement);
+    };
+  </script>
+</html>
