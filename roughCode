@@ -32,3 +32,18 @@ readdir
 
 // console.log(getDirectories(directroy));
 
+
+
+comments:
+
+  //console.log(boxerName);
+
+  //you cannot have response.json and response.render at once
+  //response.json(boxerName);
+  //{} without it there will be an error
+
+//this will send a json page
+  //response.send(boxerName);
+
+
+

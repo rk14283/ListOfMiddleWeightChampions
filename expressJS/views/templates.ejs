@@ -11,7 +11,9 @@
     <label>
       select a champion
       <select id="filters">
-        <option><%=boxerName.name%></option>
+        <% for (boxerName of boxerNames){ %>
+        <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
+        <% } %>
       </select>
     </label>
     <!--Now if I click the button all the stuff goes up and image disspears-->
@@ -30,25 +32,33 @@
       //console.log("I GOT CLICKED")
 
       // 4. Event handler performs some kind of action (change the page)
-      //const dropdown = document.getElementById("filters")
-      //console.log("DROPDOWN!", dropdown.value)
+      const dropdown = document.getElementById("filters");
+      //console.log("DROPDOWN of Champions!", dropdown.value);
+
+      let dropDownValue = parseInt(dropdown.value);
 
       // 5. We need to get a url from somewhere (api)
       //get object Tommy Hearns, and then in that you have to get imageURL
 
       const response = await fetch(
+        //json gets, name, id, imageURL
         `http://localhost:9000/api/boxers/:name/json`
       );
 
-      //error is saying that you are recieving HTML instead of JSON
-
       const json = await response.json();
-      //console.log(json)
 
       // 6. Select the image HTML element
       //here is where all the problem started
       const imageElement = document.getElementById("tommy");
-
+      //console.log("CHECK FOR ICECBE!", imageElement);
+      for (info of json) {
+        //console.log(info.id);
+        //hard coding works
+        if (dropDownValue === info.id) {
+          console.log(info.imageURL);
+          imageElement.src = "https://" + info.imageURL;
+        }
+      }
       //console.log(json.imageURL)
       //stringImage = JSON.stringify(json.imageURL)
       //if (imageElement === null) {
@@ -57,9 +67,9 @@
       // imageElement = "https://" + json.imageURL;
       //  }
       // 7. Change the attributes of the image+
-      imageElement.src = "https://" + json.imageURL;
+      //imageElement.src = "https://" + json.imageURL;
       //console.log(stringImage)
-      console.log("CHECK FOR ICECBE!", imageElement);
+      //console.log("CHECK FOR ICECBE!", imageElement);
     };
   </script>
 </html>

@@ -63,7 +63,10 @@ Uncaught TypeError: Cannot set properties of null (setting 'onclick')
     />
 
 
-even without ejs syntax I can see the image
+fixede it, problem was img tag was not there 
+
+next step is to get all boxers in the drop down
+The when dropdown is selected you bring the image
 
 
 
