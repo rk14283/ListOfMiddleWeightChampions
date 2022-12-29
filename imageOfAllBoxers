@@ -59,6 +59,18 @@
           imageElement.src = "https://" + info.imageURL;
         }
       }
+      //console.log(json.imageURL)
+      //stringImage = JSON.stringify(json.imageURL)
+      //if (imageElement === null) {
+      //console.log("it is null")
+
+      // imageElement = "https://" + json.imageURL;
+      //  }
+      // 7. Change the attributes of the image+
+      //imageElement.src = "https://" + json.imageURL;
+      //console.log(stringImage)
+      //console.log("CHECK FOR ICECBE!", imageElement);
     };
   </script>
 </html>
+
