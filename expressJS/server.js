@@ -65,12 +65,6 @@ app.get("/api/boxers/:name/json", async (request, response) => {
     where: {
       formerChampion: true,
     },
-    //this will send a json page
-    // select: {
-    //   name: true,
-    //   id: true,
-    //   imageURL: true,
-    // },
   });
   response.send(allBoxerNames);
 });
