@@ -7,8 +7,7 @@
     <title>List Of Middleweight Champions</title>
   </head>
   <body>
-    <button id="get-btn">Get a boxer</button>
-    <label>
+    <label id="get-label">
       select a champion
       <select id="filters">
         <% for (boxerName of boxerNames){ %>
@@ -24,41 +23,45 @@
     // 1. HTML element to click
     // 2. Select the HTML element in our code
     const button = document.getElementById("get-btn");
+    const label = document.getElementById("get-label");
     // 3. Add an event handler to an event listener
     // event listener: .onclick
     // handler: a function
 
-    button.onclick = async function () {
+    label.onchange = async function () {
       //console.log("I GOT CLICKED")
 
       // 4. Event handler performs some kind of action (change the page)
       const dropdown = document.getElementById("filters");
       //console.log("DROPDOWN of Champions!", dropdown.value);
 
-      let dropDownValue = parseInt(dropdown.value);
+      let boxerId = parseInt(dropdown.value);
 
       // 5. We need to get a url from somewhere (api)
       //get object Tommy Hearns, and then in that you have to get imageURL
 
       const response = await fetch(
         //json gets, name, id, imageURL
-        `http://localhost:9000/api/boxers/:name/json`
+        `http://localhost:9000/api/boxers/${boxerId}/json`
       );
 
       const json = await response.json();
+      console.log(json);
+      const imageElement = document.getElementById("tommy");
+      imageElement.src = "https://" + json.imageURL;
 
       // 6. Select the image HTML element
       //here is where all the problem started
-      const imageElement = document.getElementById("tommy");
+      // const imageElement = document.getElementById("tommy");
       //console.log("CHECK FOR ICECBE!", imageElement);
-      for (info of json) {
-        //console.log(info.id);
-        //hard coding works
-        if (dropDownValue === info.id) {
-          console.log(info.imageURL);
-          imageElement.src = "https://" + info.imageURL;
-        }
-      }
+      //for (info of json) {
+      //console.log(info.id);
+      //hard coding works
+      //if (dropDownValue === info.id) {
+      // console.log(info.imageURL);
+      //imageElement.src = "https://" + info.imageURL;
+      //}
+      //}
     };
   </script>
 </html>

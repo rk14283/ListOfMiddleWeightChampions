@@ -42,7 +42,7 @@ app.get("/boxers", async (request, response) => {
 //   console.log(boxerName);
 //   response.json(boxerName);
 // });
-app.get("/api/boxers/:name", async (request, response) => {
+app.get("/", async (request, response) => {
   //I do not need number because it is already in number, but if I use number I get NAN
   //console.log("Hello");
   const boxerNames = await prisma.boxer.findMany({
@@ -58,24 +58,28 @@ app.get("/api/boxers/:name", async (request, response) => {
   response.render("templates", { boxerNames: boxerNames });
 });
 
-app.get("/api/boxers/:name/json", async (request, response) => {
+app.get("/api/boxers/:id/json", async (request, response) => {
   //I do not need number because it is already in number, but if I use number I get NAN
-  //console.log("Hello");
-  const allBoxerNames = await prisma.boxer.findMany({
+  console.log("these are params", request.params.id);
+  //step 1: request params id to a number
+  let boxerId = parseInt(request.params.id);
+  //step 2: use this number
+  //step 3: check if the matches
+  console.log("this is boxer id", boxerId);
+
+  //step 5: display the boxer
+
+  let oneBoxerInfo = await prisma.boxer.findUnique({
     where: {
-      formerChampion: true,
+      id: boxerId,
     },
   });
-  response.send(allBoxerNames);
+  //response.json(oneBoxerInfo);
+  //step 4: send a response
+  response.send(oneBoxerInfo);
+  //console.log(oneBoxerInfo);
 });
 
 app.listen(9000, function () {
   console.log("heard on 9000");
 });
-
-//Further steps:
-//Dropdown of all boxers, done before, can see a referenced video
-//figure out what ID is doing
-//When boxer is selected bring its imageURL
-//Try two boxers
-//work only with dropdown not click event
