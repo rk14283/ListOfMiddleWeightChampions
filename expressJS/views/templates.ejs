@@ -8,60 +8,68 @@
   </head>
   <body>
     <label id="get-label">
-      select a champion
+      select a boxer
       <select id="filters">
         <% for (boxerName of boxerNames){ %>
         <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
         <% } %>
       </select>
+      <br />
     </label>
-    <!--Now if I click the button all the stuff goes up and image disspears-->
-    <img src="" id="tommy" />
+    <img src="" id="boxerOne" />
+
+    <label id="get-labelTwo">
+      select an opponent
+      <select id="opponents">
+        <% for (boxerName of boxerNames){ %>
+        <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
+        <% } %>
+      </select>
+    </label>
+    <img src="" id="opponentPicture" />
+    <button id="box">Box</button>
   </body>
 
   <script>
-    // 1. HTML element to click
-    // 2. Select the HTML element in our code
-    const button = document.getElementById("get-btn");
     const label = document.getElementById("get-label");
-    // 3. Add an event handler to an event listener
-    // event listener: .onclick
-    // handler: a function
+    const opponenetLabel = document.getElementById("get-labelTwo");
+    const boxButton = document.getElementById("box");
+    // console.log("fight!", boxButton);
 
-    label.onchange = async function () {
-      //console.log("I GOT CLICKED")
+    label.onchange = () => displayImage("filters", "boxerOne");
+    opponenetLabel.onchange = () =>
+      displayImage("opponents", "opponentPicture");
 
-      // 4. Event handler performs some kind of action (change the page)
-      const dropdown = document.getElementById("filters");
-      //console.log("DROPDOWN of Champions!", dropdown.value);
+    async function displayImage(dropDownId, imageId) {
+      const dropdown = document.getElementById(dropDownId);
 
       let boxerId = parseInt(dropdown.value);
 
-      // 5. We need to get a url from somewhere (api)
-      //get object Tommy Hearns, and then in that you have to get imageURL
-
       const response = await fetch(
-        //json gets, name, id, imageURL
         `http://localhost:9000/api/boxers/${boxerId}/json`
       );
 
       const json = await response.json();
-      console.log(json);
-      const imageElement = document.getElementById("tommy");
+      const imageElement = document.getElementById(imageId);
       imageElement.src = "https://" + json.imageURL;
+    }
+    boxButton.onclick = async function () {
+      //console.log("I was clicked");
 
-      // 6. Select the image HTML element
-      //here is where all the problem started
-      // const imageElement = document.getElementById("tommy");
-      //console.log("CHECK FOR ICECBE!", imageElement);
-      //for (info of json) {
-      //console.log(info.id);
-      //hard coding works
-      //if (dropDownValue === info.id) {
-      // console.log(info.imageURL);
-      //imageElement.src = "https://" + info.imageURL;
-      //}
-      //}
+      const mainBoxerDropdown = document.getElementById("filters");
+      let mainBoxerId = parseInt(mainBoxerDropdown.value);
+
+      //console.log(mainBoxerId);
+      const opponentBoxerDropdown = document.getElementById("opponents");
+      let opponentBoxerId = parseInt(opponentBoxerDropdown.value);
+
+      //console.log(opponentBoxerId);
+      let url = `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`;
+
+      const newResponse = await fetch(
+        `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
+      );
+      //console.log(url);
     };
   </script>
 </html>

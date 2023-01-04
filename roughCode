@@ -45,5 +45,60 @@ comments:
 //this will send a json page
   //response.send(boxerName);
 
+    // 1. HTML element to click
+    // 2. Select the HTML element in our code
+ // 3. Add an event handler to an event listener
+    // event listener: .onclick
+    // handler: a function
+  // opponenetLabel.onchange = async function () {
+    //console.log("I GOT selected");
+    // const dropdownTwo = document.getElementById("opponents");
+    //console.log("DROPDOWN of Opponents!", dropdownTwo.value);
+    //let opponentId = parseInt(dropdownTwo.value);
+    //console.log(opponentId);
+    //const response = await fetch(
+    //json gets, name, id, imageURL
+    //`http://localhost:9000/api/boxers/${opponentId}/json`
+    //);
+
+  //const json = await response.json();
+    //console.log(json);
+    //const imageElement = document.getElementById("opponentPicture");
+    // console.log(imageElement);
+    //imageElement.src = "https://" + json.imageURL;
+    //};
+  // label.onchange = async function two() {
+    // console.log("I was Selected");
+  // 4. Event handler performs some kind of action (change the page)
+    // const dropdown = document.getElementById("filters");
+
+    //let boxerId = parseInt(dropdown.value);
+
+    // 5. We need to get a url from somewhere (api)
+    //get object Tommy Hearns, and then in that you have to get imageURL
+
+    //const response = await fetch(
+    //json gets, name, id, imageURL
+    //`http://localhost:9000/api/boxers/${boxerId}/json`
+    //);
+
+  //const json = await response.json();
+    //console.log(json);
+    // const imageElement = document.getElementById("boxerOne");
+    // imageElement.src = "https://" + json.imageURL;
 
 
+ // 6. Select the image HTML element
+    //here is where all the problem started
+    // const imageElement = document.getElementById("tommy");
+    //console.log("CHECK FOR ICECBE!", imageElement);
+    //for (info of json) {
+    //console.log(info.id);
+    //hard coding works
+    //if (dropDownValue === info.id) {
+    // console.log(info.imageURL);
+    //imageElement.src = "https://" + info.imageURL;
+    //}
+    //}
+
+ // };
