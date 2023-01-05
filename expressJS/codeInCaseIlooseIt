@@ -335,5 +335,89 @@ app.listen(9000, function () {
 });
 
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Of Middleweight Champions</title>
+  </head>
+  <body>
+    <label id="get-label">
+      select a boxer
+      <select id="filters">
+        <% for (boxerName of boxerNames){ %>
+        <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
+        <% } %>
+      </select>
+      <br />
+    </label>
+    <img src="" id="boxerOne" />
+
+    <label id="get-labelTwo">
+      select an opponent
+      <select id="opponents">
+        <% for (boxerName of boxerNames){ %>
+        <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
+        <% } %>
+      </select>
+    </label>
+    <img src="" id="opponentPicture" />
+    <button id="box">Box</button>
+    <h3 style="color: crimson" id="winnerIs"></h3>
+  </body>
+
+  <script>
+    const label = document.getElementById("get-label");
+    const opponenetLabel = document.getElementById("get-labelTwo");
+    const boxButton = document.getElementById("box");
+    // console.log("fight!", boxButton);
+
+    label.onchange = () => displayImage("filters", "boxerOne");
+    opponenetLabel.onchange = () =>
+      displayImage("opponents", "opponentPicture");
+
+    async function displayImage(dropDownId, imageId) {
+      const dropdown = document.getElementById(dropDownId);
+
+      let boxerId = parseInt(dropdown.value);
+
+      const response = await fetch(
+        `http://localhost:9000/api/boxers/${boxerId}/json`
+      );
+
+      const json = await response.json();
+      const imageElement = document.getElementById(imageId);
+      imageElement.src = "https://" + json.imageURL;
+    }
+    boxButton.onclick = async function () {
+      //console.log("I was clicked");
+
+      const mainBoxerDropdown = document.getElementById("filters");
+      let mainBoxerId = parseInt(mainBoxerDropdown.value);
+
+      //console.log(mainBoxerId);
+      const opponentBoxerDropdown = document.getElementById("opponents");
+      let opponentBoxerId = parseInt(opponentBoxerDropdown.value);
+
+      //console.log(opponentBoxerId);
+      let url = `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`;
+
+      const newResponse = await fetch(
+        `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
+      );
+      //console.log(url);
+      const winnerResponse = await fetch(
+        `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
+      );
+
+      let winnerText = await winnerResponse.text();
+      //console.log(winnerText);
+      winnerIs.innerText = winnerText;
+    };
+  </script>
+</html>
+
 
 
