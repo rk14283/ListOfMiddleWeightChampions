@@ -49,16 +49,81 @@ app.get("/", async (request, response) => {
 app.get("/api/simulatefight/:id1/:id2", async (request, response) => {
   //right now I need to log both the ids
   //: is when you are defining parameters, but do not put colon in templates
-  let mainBoxerId = request.params.id1;
-  let opponentBoxerId = request.params.id2;
+  let mainBoxerId = parseInt(request.params.id1);
+  let opponentBoxerId = parseInt(request.params.id2);
 
-  console.log(mainBoxerId);
-  console.log(opponentBoxerId);
+  //console.log(mainBoxerId);
+  //console.log(opponentBoxerId);
   //query how many champions boxer 1 beat
+  let mainBoxerData = await prisma.boxer.findUnique({
+    where: {
+      id: mainBoxerId,
+    },
+  });
+  // console.log(mainBoxerData);
+  let mainBoxerName = mainBoxerData.name;
+  //console.log("This is my name", mainBoxerName);
+  let mainBoxerRecordById = await prisma.boxer.findUnique({
+    where: {
+      id: mainBoxerId,
+    },
+    include: {
+      fightsWon: {
+        where: {
+          boxers: {
+            every: {
+              formerChampion: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  // console.log(mainBoxerRecordById);
+  let championsBeatenByMainBoxer = mainBoxerRecordById.fightsWon.length;
+  //console.log("This is how many champions sugar ray beat",championsBeatenByMainBoxer)
   //query how many champions boxer 2 beat
+  let opponentBoxerData = await prisma.boxer.findUnique({
+    where: {
+      id: opponentBoxerId,
+    },
+  });
+  //console.log(opponentBoxerData);
+  let opponentBoxerName = opponentBoxerData.name;
+  //console.log("This is my name", opponentBoxerName);
+  let opponentBoxerRecordById = await prisma.boxer.findUnique({
+    where: {
+      id: opponentBoxerId,
+    },
+    include: {
+      fightsWon: {
+        where: {
+          boxers: {
+            every: {
+              formerChampion: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  //  console.log(opponentBoxerRecordById);
+  let championsBeatenByOpponentBoxer = opponentBoxerRecordById.fightsWon.length;
+  //console.log("This is how many champions tommy beat",championsBeatenByOpponentBoxer)
   //compute the difference
   //based on who has higher champions beaten either id 1 won, id2 won or it was a draw
+
+  let outcomeText = null;
+  if (championsBeatenByMainBoxer > championsBeatenByOpponentBoxer) {
+    outcomeText = mainBoxerName + " " + "won";
+  } else if (championsBeatenByMainBoxer < championsBeatenByOpponentBoxer) {
+    outcomeText = opponentBoxerName + " " + "won";
+  } else {
+    outcomeText = "It is a draw";
+  }
+  //console.log(outcomeText);
   //send response to front end who won
+  response.send(outcomeText);
   //show who won in front end in some way
 });
 

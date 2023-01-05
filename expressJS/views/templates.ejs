@@ -28,6 +28,7 @@
     </label>
     <img src="" id="opponentPicture" />
     <button id="box">Box</button>
+    <h3 id="winnerIs">who won</h3>
   </body>
 
   <script>
@@ -70,6 +71,11 @@
         `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
       );
       //console.log(url);
+      //  const winnerResponse = await fetch(
+      //  `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
+      //);
+      //console.log(winnerResponse);
+      // winnerIs.innerText = "he won";
     };
   </script>
 </html>
