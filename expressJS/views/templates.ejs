@@ -55,29 +55,25 @@
       imageElement.src = "https://" + json.imageURL;
     }
     boxButton.onclick = async function () {
-      //console.log("I was clicked");
+      let mainBoxerId = getBoxerId("filters");
 
-      const mainBoxerDropdown = document.getElementById("filters");
-      let mainBoxerId = parseInt(mainBoxerDropdown.value);
+      let opponentBoxerId = getBoxerId("opponents");
 
-      //console.log(mainBoxerId);
-      const opponentBoxerDropdown = document.getElementById("opponents");
-      let opponentBoxerId = parseInt(opponentBoxerDropdown.value);
-
-      //console.log(opponentBoxerId);
-      let url = `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`;
-
-      const newResponse = await fetch(
-        `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
-      );
-      //console.log(url);
       const winnerResponse = await fetch(
         `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
       );
 
       let winnerText = await winnerResponse.text();
-      //console.log(winnerText);
+
       winnerIs.innerText = winnerText;
     };
+
+    function getBoxerId(dropDownId) {
+      const dropdown = document.getElementById(dropDownId);
+
+      let boxerId = parseInt(dropdown.value);
+
+      return boxerId;
+    }
   </script>
 </html>
