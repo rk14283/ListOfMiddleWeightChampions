@@ -53,49 +53,45 @@ app.get("/api/simulatefight/:id1/:id2", async (request, response) => {
 
   //console.log("This is my name", mainBoxerName);
   // common becomes function, unique becomes parameter, remember to return the value
-  let mainBoxerRecordById = await prisma.boxer.findUnique({
-    where: {
-      id: mainBoxerId,
-    },
-    include: {
-      fightsWon: {
-        where: {
-          boxers: {
-            every: {
-              formerChampion: true,
+  async function getBoxerRecord(boxerId) {
+    let boxerRecord = await prisma.boxer.findUnique({
+      where: {
+        id: boxerId,
+      },
+      include: {
+        fightsWon: {
+          where: {
+            boxers: {
+              every: {
+                formerChampion: true,
+              },
             },
           },
         },
       },
-    },
-  });
-  let mainBoxerName = mainBoxerRecordById.name;
-  let championsBeatenByMainBoxer = mainBoxerRecordById.fightsWon.length;
+    });
+    return boxerRecord;
+  }
 
-  //console.log("This is my name", opponentBoxerName);
-  let opponentBoxerRecordById = await prisma.boxer.findUnique({
-    where: {
-      id: opponentBoxerId,
-    },
-    include: {
-      fightsWon: {
-        where: {
-          boxers: {
-            every: {
-              formerChampion: true,
-            },
-          },
-        },
-      },
-    },
-  });
-  let opponentBoxerName = opponentBoxerRecordById.name;
-  let championsBeatenByOpponentBoxer = opponentBoxerRecordById.fightsWon.length;
+  let championsBeatenByMainBoxer = await getBoxerRecord(mainBoxerId);
+
+  let championsBeatenByMainBoxerNumber =
+    championsBeatenByMainBoxer.fightsWon.length;
+  // console.log(championsBeatenByMainBoxerNumber);
+  let mainBoxerName = championsBeatenByMainBoxer.name;
+
+  let championsBeatenByOpponentBoxer = await getBoxerRecord(opponentBoxerId);
+  let championsBeatenByOpponentBoxerNumber =
+    championsBeatenByOpponentBoxer.fightsWon.length;
+
+  let opponentBoxerName = championsBeatenByOpponentBoxer.name;
 
   let outcomeText = null;
-  if (championsBeatenByMainBoxer > championsBeatenByOpponentBoxer) {
+  if (championsBeatenByMainBoxerNumber > championsBeatenByOpponentBoxerNumber) {
     outcomeText = mainBoxerName + " " + "won";
-  } else if (championsBeatenByMainBoxer < championsBeatenByOpponentBoxer) {
+  } else if (
+    championsBeatenByMainBoxerNumber < championsBeatenByOpponentBoxerNumber
+  ) {
     outcomeText = opponentBoxerName + " " + "won";
   } else {
     outcomeText = "It is a draw";
