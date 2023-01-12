@@ -1,0 +1,85 @@
+   /*padding: 250px;*/
+    /*height: 5em;*/
+    /*
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    */
+    padding: 250px;
+    margin-top: auto;
+    margin-right: auto;
+    justify-items: center;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: 10px;
+
+
+   height: 140px;
+    /*   padding: 100px;*/
+    margin-top: 5px;
+    margin-left: 800px;
+
+    position: absolute; /* 2 */
+    top: 50%; /* 3 */
+    transform: translate(0, -50%);
+
+
+
+
+
+#boxerOne {
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border-color: blueviolet;
+    border-style: solid;
+    border-width: 10px;
+  }
+  #opponentPicture {
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border-color: blueviolet;
+    border-style: solid;
+    border-width: 10px;
+  }
+  body {
+    background-color: purple;
+    position: relative;
+    text-align: center;
+  }
+
+  .d1 {
+    /*background: lightcoral;*/
+    grid-column: 2/3;
+    grid-row: 4/4;
+    /*first two are start and last the end*/
+    grid-area: 1/1/5/5;
+  }
+  .d2 {
+    /*background: palegreen;*/
+    grid-column: 4/5;
+    grid-row: 4/4;
+    grid-area: 1/5/5/5;
+  }
+  .d3 {
+    grid-column: 3/3;
+    grid-row: 5/5;
+  }
+  .container {
+    font-size: 40px;
+    width: 100%;
+    background: cyan;
+    display: grid;
+    /*if you use px grid-row: 4/5;size would not change, and fr size changes according to page*/
+    grid-template-columns: 50px 50px 50px 50px;
+    grid-template-rows: 50px 50px 50px 50px;
+    /*grid-column-gap: 100px;*/
+    /*grid-row-gap: 5px;*/
+    /*first is for the rows second for the columns*/
+
+    grid-gap: 40px 100px;
+  }

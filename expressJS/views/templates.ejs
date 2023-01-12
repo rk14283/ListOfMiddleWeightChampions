@@ -1,4 +1,66 @@
 <!DOCTYPE html>
+<style>
+  #boxerOne {
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border-color: blueviolet;
+    border-style: solid;
+    border-width: 10px;
+  }
+  #opponentPicture {
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border-color: blueviolet;
+    border-style: solid;
+    border-width: 10px;
+  }
+  body {
+    background-color: purple;
+    position: relative;
+    text-align: center;
+  }
+
+  .d1 {
+    /*background: lightcoral;*/
+    /*grid-column: 2/3;
+    grid-row: 4/4;*/
+    /*first two are start and last the end*/
+    grid-area: 1/1/5/5;
+  }
+  .d2 {
+    /*background: palegreen;*/
+    /* grid-column: 2/3;
+    grid-row: 4/4;*/
+    grid-area: 1/5/5/5;
+    margin-right: 200px;
+  }
+  .d3 {
+    grid-column: 3/3;
+    grid-row: 5/5;
+    grid-area: 4/4/4/4;
+    height: 200px;
+    width: 200px;
+  }
+
+  .container {
+    font-size: 40px;
+    margin-top: 100px;
+    margin-left: 200px;
+    width: 1000px;
+    background: cyan;
+    display: grid;
+    /*if you use px grid-row: 4/5;size would not change, and fr size changes according to page*/
+    grid-template-columns: 50px 50px 50px 50px;
+    grid-template-rows: 50px 50px 50px 50px;
+    /*grid-column-gap: 100px;*/
+    /*grid-row-gap: 5px;*/
+    /*first is for the rows second for the columns*/
+
+    grid-gap: 40px 100px;
+  }
+</style>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -6,29 +68,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>List Of Middleweight Champions</title>
   </head>
-  <body>
-    <label id="get-label">
-      select a boxer
-      <select id="filters">
-        <% for (boxerName of boxerNames){ %>
-        <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
-        <% } %>
-      </select>
-      <br />
-    </label>
-    <img src="" id="boxerOne" />
 
-    <label id="get-labelTwo">
-      select an opponent
-      <select id="opponents">
-        <% for (boxerName of boxerNames){ %>
-        <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
-        <% } %>
-      </select>
-    </label>
-    <img src="" id="opponentPicture" />
-    <button id="box">Box</button>
-    <h3 style="color: crimson" id="winnerIs"></h3>
+  <body>
+    <h1 style="color: red">MiddleWeight Fanatasy Matchup</h1>
+    <div class="container">
+      <div class="d1">
+        <label id="get-label">
+          select a boxer
+
+          <select id="filters">
+            <% for (boxerName of boxerNames){ %>
+            <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
+            <% } %>
+          </select>
+          <br />
+        </label>
+        <img src="" id="boxerOne" />
+      </div>
+      <div class="d2">
+        <label id="get-labelTwo">
+          <div class="opponentText">select an opponent</div>
+          <select id="opponents">
+            <% for (boxerName of boxerNames){ %>
+            <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
+            <% } %>
+          </select>
+        </label>
+
+        <img src="" id="opponentPicture" />
+      </div>
+      <div class="d3">
+        <button id="box">Box</button>
+      </div>
+      <h3 style="color: crimson" id="winnerIs"></h3>
+    </div>
   </body>
 
   <script>
@@ -76,4 +149,10 @@
       return boxerId;
     }
   </script>
+  <!--
+   1) Make the button bigger and put a bell icon 
+   2) image has to be centered and in a cirlce 
+   3) Drowpdown and text must fit screen when I expand 
+   4) Style the heading
+  -->
 </html>
