@@ -14,8 +14,6 @@
     grid-template-rows: repeat(5, 200px);
     grid-template-columns: repeat(5, 200px);
     grid-gap: 40px;
-    margin-left: 10%;
-    margin-right: 10%;
 
     grid-template-areas:
       "a b c d e"
@@ -199,3 +197,4 @@
    4) Style the heading
   -->
 </html>
+
