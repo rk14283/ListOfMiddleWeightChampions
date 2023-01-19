@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <style>
   * {
-    border: 1px solid red;
+    /*  border: 1px solid red;*/
   }
   html,
   body {
@@ -139,27 +139,24 @@
     let opponentBoxerName = document.getElementById("opponents");
     let mainBoxerText = null;
     let opponentBoxerText = null;
-    mainBoxerName.onchange = function () {
-      var length = mainBoxerName.children.length;
+
+    function findSelectedBoxerName(dropdown) {
+      var length = dropdown.children.length;
 
       for (var i = 0; i < length; i++) {
-        if (mainBoxerName.children[i].selected) {
+        if (dropdown.children[i].selected) {
           //challenge, how do I convert this into a
-          mainBoxerText = mainBoxerName.children[i].text;
+          return dropdown.children[i].text;
         }
       }
+    }
+    mainBoxerName.onchange = function () {
+      mainBoxerText = findSelectedBoxerName(mainBoxerName);
     };
 
     opponentBoxerName.onchange = function () {
-      var length = opponentBoxerName.children.length;
-
-      for (var i = 0; i < length; i++) {
-        if (opponentBoxerName.children[i].selected) {
-          opponentBoxerText = opponentBoxerName.children[i].text;
-        }
-      }
+      opponentBoxerText = findSelectedBoxerName(opponentBoxerName);
     };
-    // let mainBoxerNameText = boxerText;
 
     label.onchange = () => displayImage("filters", "boxerOne");
     opponenetLabel.onchange = () =>
@@ -196,19 +193,19 @@
       //console.log("This is opponent boxer dropdown", opponentBoxerText);
 
       if (winnerText === mainBoxerText) {
-        document.getElementById("imageOne").style.background = "green";
-        document.getElementById("imageTwo").style.background = "red";
-        winnerIs.innerText = winnerText + " " + "won";
+        displayOutcome("green", "red", winnerText + " " + "won");
       } else if (winnerText === opponentBoxerText) {
-        document.getElementById("imageOne").style.background = "red";
-        document.getElementById("imageTwo").style.background = "green";
-        winnerIs.innerText = winnerText + " " + "won";
+        displayOutcome("red", "green", winnerText + " " + "won");
       } else {
-        document.getElementById("imageOne").style.background = "yellow";
-        document.getElementById("imageTwo").style.background = "yellow";
-        winnerIs.innerText = "It is a draw";
+        displayOutcome("yellow", "yellow", "it's a draw");
       }
     };
+
+    function displayOutcome(colorOne, colorTwo, outcomeText) {
+      document.getElementById("imageOne").style.background = colorOne;
+      document.getElementById("imageTwo").style.background = colorTwo;
+      winnerIs.innerText = outcomeText;
+    }
 
     function getBoxerId(dropDownId) {
       const dropdown = document.getElementById(dropDownId);
