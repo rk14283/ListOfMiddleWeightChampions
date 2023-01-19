@@ -174,6 +174,10 @@
       const json = await response.json();
       const imageElement = document.getElementById(imageId);
       imageElement.src = "https://" + json.imageURL;
+      if (json.imageURL === null) {
+        imageElement.src =
+          "https://c7.alamy.com/comp/FCF9TM/3d-render-of-a-boxer-holding-a-question-mark-symbol-FCF9TM.jpg";
+      }
     }
     boxButton.onclick = async function () {
       let mainBoxerId = getBoxerId("filters");
