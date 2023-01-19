@@ -88,13 +88,15 @@ app.get("/api/simulatefight/:id1/:id2", async (request, response) => {
 
   let outcomeText = null;
   if (championsBeatenByMainBoxerNumber > championsBeatenByOpponentBoxerNumber) {
-    outcomeText = mainBoxerName + " " + "won";
+    //outcomeText = mainBoxerName + " " + "won";
+    outcomeText = mainBoxerName;
   } else if (
     championsBeatenByMainBoxerNumber < championsBeatenByOpponentBoxerNumber
   ) {
-    outcomeText = opponentBoxerName + " " + "won";
+    //outcomeText = opponentBoxerName + " " + "won";
+    outcomeText = opponentBoxerName;
   } else {
-    outcomeText = "It is a draw";
+    //outcomeText = "It is a draw";
   }
   response.send(outcomeText);
 });

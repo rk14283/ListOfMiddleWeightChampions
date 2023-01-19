@@ -183,3 +183,117 @@
     margin-left: 100px;
     margin-right: 100px;
   }
+
+
+
+
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+  }
+
+  h1 {
+    display: block;
+    text-align: center;
+  }
+
+  /*11 items*/
+  #container {
+    font-size: 40px;
+    /*width: 2000px;*/
+    background: magenta;
+    display: grid;
+    grid-template-rows: repeat(5, 200px);
+    grid-template-columns: repeat(5, 200px);
+    grid-gap: 40px;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    grid-template-areas:
+      "a b c d e"
+      "f g h i k"
+      "l m n o p"
+      "q r s t u";
+  }
+
+  #vs {
+    /*background-color: crimson;*/
+    grid-area: g/m;
+    margin-left: 100px;
+  }
+  #d1 {
+    grid-area: f/l/g/m;
+  }
+  #d2 {
+    grid-area: h/n/i/o;
+    margin-top: 15px;
+  }
+  #mainBoxerOptions {
+    /* background: lightskyblue;*/
+  }
+  #mainBoxerText {
+    /*background: lightsalmon;*/
+  }
+  #imageOne {
+    /*background: paleturquoise;*/
+  }
+  #boxerOne {
+    background: lightpink;
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border-color: blueviolet;
+    border-style: solid;
+    border-width: 10px;
+
+    /* margin-right: 700px;*/
+  }
+
+  #opponentBoxerText {
+    /* background: palegreen;*/
+    /*margin-left: 250px;*/
+  }
+  #opponentBoxerOptions {
+    /*background: yellow;*/
+    /* margin-right: 500px;*/
+  }
+  #opponentPicture {
+    background: brown;
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border-color: blueviolet;
+    border-style: solid;
+    border-width: 10px;
+    /*margin-left: 700px;*/
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 25px;
+  }
+  #imageTwo {
+    /*background: coral;*/
+    /*margin-right: 500px;*/
+  }
+
+  #d3 {
+    height: 300px;
+    margin-left: 100px;
+    grid-area: q/r/t/u;
+  }
+  #box {
+    background: purple;
+    margin-right: 500px;
+    width: 400px;
+  }
+
+
+ mainBoxerName.onchange = function () {
+      var length = mainBoxerName.children.length;
+      for (var i = 0; i < length; i++) {
+        if (mainBoxerName.children[i].selected) {
+          console.log(mainBoxerName.children[i].text);
+        }
+      }
+    };
+
