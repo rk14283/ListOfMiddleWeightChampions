@@ -167,9 +167,7 @@
 
       let boxerId = parseInt(dropdown.value);
 
-      const response = await fetch(
-        `http://localhost:9000/api/boxers/${boxerId}/json`
-      );
+      const response = await fetch(`/api/boxers/${boxerId}/json`);
 
       const json = await response.json();
       const imageElement = document.getElementById(imageId);
