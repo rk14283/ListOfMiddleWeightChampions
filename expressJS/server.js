@@ -117,6 +117,7 @@ app.get("/api/boxers/:id/json", async (request, response) => {
   response.send(oneBoxerInfo);
 });
 
-app.listen(9000, function () {
-  console.log("heard on 9000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("Server listening on http://localhost:" + PORT);
 });
