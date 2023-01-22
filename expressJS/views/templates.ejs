@@ -66,13 +66,21 @@
     border-style: solid;
     object-fit: cover;
   }
+  /*
+  #footer {
+    position: relative;
+    bottom: 0;
+    z-index: 100;
+  }
+  */
   #box {
     display: block;
     background-color: orange;
     margin-top: 500px;
     height: 25px;
-    width: 200px;
+    width: 35vw;
   }
+
   #h3 {
     font-size: 400px;
   }
@@ -123,10 +131,13 @@
         </label>
       </div>
     </div>
+
+    <!-- <div id="footer" style="text-align: center">-->
     <div id="d3">
       <button id="box">Box</button>
+
+      <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
     </div>
-    <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
   </body>
 
   <script>
@@ -151,11 +162,14 @@
       }
     }
     mainBoxerName.onchange = function () {
+      document.getElementById("imageOne").style.background = null;
+
       mainBoxerText = findSelectedBoxerName(mainBoxerName);
     };
 
     opponentBoxerName.onchange = function () {
       opponentBoxerText = findSelectedBoxerName(opponentBoxerName);
+      document.getElementById("imageTwo").style.background = null;
     };
 
     label.onchange = () => displayImage("filters", "boxerOne");
