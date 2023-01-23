@@ -3,12 +3,34 @@
   * {
     /*  border: 1px solid red;*/
   }
+
   html,
   body {
     height: 100%;
     width: 100%;
   }
   /*3 dives, mainBoxer, opponentBoxer,vs*/
+  /* #h1 {
+    font-size: 10px;
+    height: 10px;
+
+    position: relative;
+  }*/
+  /*
+  .header {
+    height: 200vh;
+    width: 40%;
+    padding-top: 0 8%;
+  }*/
+
+  #h1 {
+    /*
+    font-size: 20px;
+    position: relative;
+    margin-top: 25vh;
+    */ /*
+    margin-top: 50vw;*/
+  }
   body {
     background-color: skyblue;
     display: flex;
@@ -19,9 +41,10 @@
 
   #container {
     display: flex;
-    /* flex-wrap: wrap-reverse;*/
+    /*flex-wrap: wrap-reverse;*/
     justify-content: center;
     flex-direction: row;
+
     align-items: center;
     gap: 20px;
     position: absolute;
@@ -36,7 +59,20 @@
   h3 {
     font-size: 40px;
   }
-
+  /*
+  #title {
+    justify-content: center;
+    margin-bottom: 30vw;
+  }
+  #vs {
+    margin-left: 50px;
+  }
+  */
+  #vs {
+    padding-right: 20px;
+    margin-right: 10vw;
+    margin-left: 10vw;
+  }
   #d1 {
     width: 35vw;
     /*order: 0;*/
@@ -76,14 +112,47 @@
   #box {
     display: block;
     background-color: orange;
-    margin-top: 500px;
+    /*Adding vw seems to have fixed it*/
+    margin-top: 50vw;
+
     height: 25px;
-    width: 35vw;
+    width: 25vw;
   }
 
-  #h3 {
-    font-size: 400px;
+  @media all and (min-height: 500px) /*all and (min-width: 2000px) */ {
+    body {
+      /* background-color: blue;*/
+    }
+    #boxerOne {
+      height: 20vw;
+      width: 20vw;
+      /*order: 0;*/
+    }
+    #opponentPicture {
+      height: 20vw;
+      width: 20vw;
+    }
+    #imageOne {
+      width: 25vw;
+    }
+    #imageTwo {
+      width: 25vw;
+    }
+    #box {
+      margin-top: 30vw;
+    }
   }
+
+  @media not all and (min-width: 1400px) {
+    #box {
+      margin-top: 50vw;
+    }
+  }
+
+  /*
+  #d3 {
+    margin-top: 100px;
+  }*/
 
   /*d1,d2 have label text and dropdown*/
 </style>
@@ -92,12 +161,17 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>List Of Middleweight Champions</title>
   </head>
 
   <body>
-    <h1 style="color: black">MiddleWeight Fanatasy Matchup</h1>
-
+    <!--If I remove it then button does not work-->
+    <div class="header">
+      <h1 id="body-content" style="color: black">
+        MiddleWeight Fanatasy Matchup
+      </h1>
+    </div>
     <div id="container">
       <div id="d1">
         <div id="imageOne">
@@ -114,7 +188,9 @@
           </select>
         </label>
       </div>
+      <!-- <div id="title"><h3>MiddleWeight Fantasy Matchup</h3></div>-->
       <div id="vs"><h2 style="color: black">VS</h2></div>
+
       <div id="d2">
         <div id="imageTwo">
           <img src="" id="opponentPicture" />
@@ -133,11 +209,13 @@
     </div>
 
     <!-- <div id="footer" style="text-align: center">-->
-    <div id="d3">
-      <button id="box">Box</button>
+    <!-- <div id="d3">-->
 
-      <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
-    </div>
+    <button id="box">Box</button>
+
+    <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
+
+    <!-- </div>-->
   </body>
 
   <script>
@@ -162,14 +240,13 @@
       }
     }
     mainBoxerName.onchange = function () {
-      document.getElementById("imageOne").style.background = null;
-
       mainBoxerText = findSelectedBoxerName(mainBoxerName);
     };
 
     opponentBoxerName.onchange = function () {
       opponentBoxerText = findSelectedBoxerName(opponentBoxerName);
-      document.getElementById("imageTwo").style.background = null;
+
+      //document.getElementById("imageTwo").style.background = null;
     };
 
     label.onchange = () => displayImage("filters", "boxerOne");
@@ -177,6 +254,8 @@
       displayImage("opponents", "opponentPicture");
 
     async function displayImage(dropDownId, imageId) {
+      document.getElementById("imageOne").style.background = null;
+      document.getElementById("imageTwo").style.background = null;
       const dropdown = document.getElementById(dropDownId);
 
       let boxerId = parseInt(dropdown.value);
