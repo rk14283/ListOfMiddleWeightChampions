@@ -47,7 +47,7 @@
 
     align-items: center;
     gap: 20px;
-    position: absolute;
+    /* position: absolute;*/
     font-size: 25px;
   }
   select {
@@ -69,38 +69,38 @@
   }
   */
   #vs {
-    padding-right: 20px;
-    margin-right: 10vw;
-    margin-left: 10vw;
   }
-  #d1 {
+  .boxerCard {
     width: 35vw;
+    max-width: 450px;
+    /*width: 20vw;*/
+
     /*order: 0;*/
   }
-  #d2 {
-    width: 35vw;
+  .boxerImageContainer {
+    /*this is 100% of the direct parent*/
+    width: 100%;
+  }
+  .boxerImage {
+    background: lightpink;
+
+    height: 35vw;
+    border-radius: 50%;
+    border-style: solid;
+    object-fit: cover;
+    width: 100%;
+    max-height: 450px;
   }
   #imageOne {
     /* background-color: red;*/
   }
+
   #boxerOne {
-    background: lightpink;
-    width: 35vw;
-    height: 35vw;
-    border-radius: 50%;
     border-color: red;
-    border-style: solid;
-    object-fit: cover;
   }
 
   #opponentPicture {
-    background: lightpink;
-    width: 35vw;
-    height: 35vw;
-    border-radius: 50%;
     border-color: blue;
-    border-style: solid;
-    object-fit: cover;
   }
   /*
   #footer {
@@ -113,7 +113,6 @@
     display: block;
     background-color: orange;
     /*Adding vw seems to have fixed it*/
-    margin-top: 50vw;
 
     height: 25px;
     width: 25vw;
@@ -123,31 +122,17 @@
     body {
       /* background-color: blue;*/
     }
-    #boxerOne {
-      height: 20vw;
-      width: 20vw;
-      /*order: 0;*/
-    }
-    #opponentPicture {
-      height: 20vw;
-      width: 20vw;
-    }
-    #imageOne {
-      width: 25vw;
-    }
-    #imageTwo {
-      width: 25vw;
-    }
-    #box {
-      margin-top: 30vw;
-    }
   }
 
   @media not all and (min-width: 1400px) {
+  }
+
+  /*@media not all and (min-width: 400px) {
     #box {
       margin-top: 50vw;
     }
   }
+  */
 
   /*
   #d3 {
@@ -173,9 +158,9 @@
       </h1>
     </div>
     <div id="container">
-      <div id="d1">
-        <div id="imageOne">
-          <img src="" id="boxerOne" />
+      <div id="d1" class="boxerCard">
+        <div id="imageOne" class="boxerImageContainer">
+          <img src="" id="boxerOne" class="boxerImage" />
         </div>
 
         <label id="get-label">
@@ -191,9 +176,9 @@
       <!-- <div id="title"><h3>MiddleWeight Fantasy Matchup</h3></div>-->
       <div id="vs"><h2 style="color: black">VS</h2></div>
 
-      <div id="d2">
-        <div id="imageTwo">
-          <img src="" id="opponentPicture" />
+      <div id="d2" class="boxerCard">
+        <div id="imageTwo" class="boxerImageContainer">
+          <img src="" id="opponentPicture" class="boxerImage" />
         </div>
 
         <label id="get-labelTwo">
