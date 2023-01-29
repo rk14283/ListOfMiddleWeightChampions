@@ -66,6 +66,7 @@ async function getRecords() {
 //getRecords();
 
 const fightHashMap = {};
+const fightsToInsert = [];
 async function insertFights() {
   const boxerHashMap = await createHashMap();
   //console.log(boxerHashMap);
@@ -77,9 +78,13 @@ async function insertFights() {
     //console.log(boxer.record.length);
     //console.log(boxer.record.Notes);
     // const boxerName = boxer.record.Notes?.trim()?.replaceAll("\n", ", ");
-    // console.log(boxerName);
+    // ;
+    //let boxerName = boxer.name;
+
     for (record of boxer.record) {
       //console.log(record.Date);
+      //console.log(boxer.name);
+
       const cleanedNo = record.No?.trim()?.replaceAll("\n", "");
       const cleanedResult = record.Result?.trim()?.replaceAll("\n", "");
       const cleanedOpponent = record.Opponent?.trim()?.replaceAll("\n", "");
@@ -87,24 +92,38 @@ async function insertFights() {
       const cleanedRoundTime = record.Round_Time?.trim()?.replaceAll("\n", "");
       const cleanedLocation = record.Location?.trim()?.replaceAll("\n", "");
       const cleanedNotes = record.Notes?.trim()?.replaceAll("\n", "");
-      const fightDate = new Date(record.Date.trim());
+      let fightDate = new Date(record.Date.trim());
+      let winnerId = null;
 
       //console.log(record.Date, boxer.name);
       //console.log(fightDate, fightDate === "Invalid Date");
+      if (cleanedResult === "Win") {
+        winnerId = 1;
+      } else if (cleanedResult === "Loss") {
+        winnerId = 2;
+      }
       const cleanedRecord = {
-        No: cleanedNo,
-        Result: cleanedResult,
-        Opponent: cleanedOpponent,
+        //No: cleanedNo,
+        Date: fightDate,
+        //Result: cleanedResult,
+        // Opponent: cleanedOpponent,
         Type: cleanedType,
         Round_Time: cleanedRoundTime,
-        Date: fightDate,
-        Location: cleanedLocation,
-        Notes: cleanedNotes,
+        //Location: cleanedLocation,
+        //Notes: cleanedNotes,
+        winnerId: winnerId,
+        connect: { mainBoxer: boxer.name, opponentBoxer: cleanedOpponent },
+        //showing one object instead of names
+        //connect: [{ mainBoxer: boxer.name, OpponentBoxer: cleanedOpponent }],
+        //showing two objects instead of one
+        //connect: [{ name: boxer.name }, { name: cleanedOpponent }],
       };
+
       //console.log(cleanedRecord);
       //console.log(cleanedRecord.Date);
       try {
         fightHashMap[fightDate.toISOString()] = cleanedRecord;
+        fightsToInsert.push(cleanedRecord);
       } catch (error) {
         //console.log(record.Date);
         if (record.Date.includes("/")) {
@@ -112,6 +131,7 @@ async function insertFights() {
           const fightDate = new Date(`${month}/${day}/${year}`);
           cleanedRecord.Date = fightDate;
           fightHashMap[fightDate.toISOString()] = cleanedRecord;
+          fightsToInsert.push(cleanedRecord);
           //console.log(fightHashMap);
         } else if (record.Date.includes("-")) {
           const [year, month, day] = record.Date.trim().split("-");
@@ -119,15 +139,29 @@ async function insertFights() {
           const fightDate = new Date(`${month}/${day}/${year}`);
           cleanedRecord.Date = fightDate;
           fightHashMap[fightDate.toISOString()] = cleanedRecord;
+          fightsToInsert.push(cleanedRecord);
         }
       }
       //console.log(fightDate);
+      // console.log(cleanedRecord.Result);
+      //infinite loop
+      // console.log(fightsToInsert);
     }
+    //infinite loop
+    // console.log(fightsToInsert);
   }
 
   //This worked
-  console.log(fightHashMap["1985-01-17T23:00:00.000Z"]);
+  //console.log(fightHashMap["1985-01-17T23:00:00.000Z"]);
   //console.log(fightHashMap);
+  //here the value of outcome does not change
+  //this goes to 7839 to 7865 depending on where I use push
+  //console.log(fightsToInsert);
+  const insertedFights = await prisma.boxer.create({
+    data: fightsToInsert,
+  });
+  console.log(insertedFights);
+  console.timeEnd();
 }
 
 insertFights();
