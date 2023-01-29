@@ -102,11 +102,12 @@ async function insertFights() {
       } else if (cleanedResult === "Loss") {
         winnerId = 2;
       }
+
       const cleanedRecord = {
-        //No: cleanedNo,
+        // No: cleanedNo,
         Date: fightDate,
         //Result: cleanedResult,
-        // Opponent: cleanedOpponent,
+        //Opponent: cleanedOpponent,
         Type: cleanedType,
         Round_Time: cleanedRoundTime,
         //Location: cleanedLocation,
@@ -157,11 +158,21 @@ async function insertFights() {
   //here the value of outcome does not change
   //this goes to 7839 to 7865 depending on where I use push
   //console.log(fightsToInsert);
-  const insertedFights = await prisma.boxer.create({
-    data: fightsToInsert,
-  });
-  console.log(insertedFights);
-  console.timeEnd();
+  try {
+    const insertedFights = await prisma.boxer.create({
+      data: {
+        boxers: {
+          //what is connect doing here
+          connect: [{ name: boxer.name }],
+          connect: [{ name: record.Opponent?.trim()?.replaceAll("\n", "") }],
+        },
+      },
+    });
+    //console.log(insertedFights);
+    console.timeEnd();
+  } catch (error) {
+    console.log("this entry did not work", error);
+  }
 }
 
 insertFights();
