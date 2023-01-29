@@ -91,17 +91,18 @@ async function insertFights() {
 
       //console.log(record.Date, boxer.name);
       //console.log(fightDate, fightDate === "Invalid Date");
-      const cleanedRecord = [
-        cleanedNo,
-        cleanedResult,
-        cleanedOpponent,
-        cleanedType,
-        cleanedRoundTime,
-        fightDate,
-        cleanedLocation,
-        cleanedNotes,
-      ];
+      const cleanedRecord = {
+        No: cleanedNo,
+        Result: cleanedResult,
+        Opponent: cleanedOpponent,
+        Type: cleanedType,
+        Round_Time: cleanedRoundTime,
+        Date: fightDate,
+        Location: cleanedLocation,
+        Notes: cleanedNotes,
+      };
       //console.log(cleanedRecord);
+      //console.log(cleanedRecord.Date);
       try {
         fightHashMap[fightDate.toISOString()] = cleanedRecord;
       } catch (error) {
@@ -109,12 +110,14 @@ async function insertFights() {
         if (record.Date.includes("/")) {
           const [day, month, year] = record.Date.trim().split("/");
           const fightDate = new Date(`${month}/${day}/${year}`);
+          cleanedRecord.Date = fightDate;
           fightHashMap[fightDate.toISOString()] = cleanedRecord;
           //console.log(fightHashMap);
         } else if (record.Date.includes("-")) {
           const [year, month, day] = record.Date.trim().split("-");
           fightHashMap[fightDate.toISOString()] = record;
           const fightDate = new Date(`${month}/${day}/${year}`);
+          cleanedRecord.Date = fightDate;
           fightHashMap[fightDate.toISOString()] = cleanedRecord;
         }
       }
@@ -123,8 +126,8 @@ async function insertFights() {
   }
 
   //This worked
-  //console.log(fightHashMap["1985-01-17T23:00:00.000Z"]);
-  console.log(fightHashMap);
+  console.log(fightHashMap["1985-01-17T23:00:00.000Z"]);
+  //console.log(fightHashMap);
 }
 
 insertFights();
