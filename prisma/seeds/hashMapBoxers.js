@@ -75,15 +75,56 @@ async function insertFights() {
     const boxerData = fs.readFileSync(files[i]);
     const boxer = JSON.parse(boxerData);
     //console.log(boxer.record.length);
-    //console.log(boxer.record);
-
+    //console.log(boxer.record.Notes);
+    // const boxerName = boxer.record.Notes?.trim()?.replaceAll("\n", ", ");
+    // console.log(boxerName);
     for (record of boxer.record) {
       //console.log(record.Date);
+      const cleanedNo = record.No?.trim()?.replaceAll("\n", "");
+      const cleanedResult = record.Result?.trim()?.replaceAll("\n", "");
+      const cleanedOpponent = record.Opponent?.trim()?.replaceAll("\n", "");
+      const cleanedType = record.Type?.trim()?.replaceAll("\n", "");
+      const cleanedRoundTime = record.Round_Time?.trim()?.replaceAll("\n", "");
+      const cleanedLocation = record.Location?.trim()?.replaceAll("\n", "");
+      const cleanedNotes = record.Notes?.trim()?.replaceAll("\n", "");
+      const fightDate = new Date(record.Date.trim());
 
-      fightHashMap[record.Date] = record;
+      //console.log(record.Date, boxer.name);
+      //console.log(fightDate, fightDate === "Invalid Date");
+      const cleanedRecord = [
+        cleanedNo,
+        cleanedResult,
+        cleanedOpponent,
+        cleanedType,
+        cleanedRoundTime,
+        fightDate,
+        cleanedLocation,
+        cleanedNotes,
+      ];
+      //console.log(cleanedRecord);
+      try {
+        fightHashMap[fightDate.toISOString()] = cleanedRecord;
+      } catch (error) {
+        //console.log(record.Date);
+        if (record.Date.includes("/")) {
+          const [day, month, year] = record.Date.trim().split("/");
+          const fightDate = new Date(`${month}/${day}/${year}`);
+          fightHashMap[fightDate.toISOString()] = cleanedRecord;
+          //console.log(fightHashMap);
+        } else if (record.Date.includes("-")) {
+          const [year, month, day] = record.Date.trim().split("-");
+          fightHashMap[fightDate.toISOString()] = record;
+          const fightDate = new Date(`${month}/${day}/${year}`);
+          fightHashMap[fightDate.toISOString()] = cleanedRecord;
+        }
+      }
+      //console.log(fightDate);
     }
   }
-  //console.log(fightHashMap);
+
+  //This worked
+  //console.log(fightHashMap["1985-01-17T23:00:00.000Z"]);
+  console.log(fightHashMap);
 }
 
 insertFights();
