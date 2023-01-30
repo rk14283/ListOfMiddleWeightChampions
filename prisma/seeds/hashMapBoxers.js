@@ -84,7 +84,7 @@ async function insertFights() {
     for (record of boxer.record) {
       //console.log(record.Date);
       //console.log(boxer.name);
-
+      const mainBoxerName = boxer.name.trim();
       const cleanedNo = record.No?.trim()?.replaceAll("\n", "");
       const cleanedResult = record.Result?.trim()?.replaceAll("\n", "");
       const cleanedOpponent = record.Opponent?.trim()?.replaceAll("\n", "");
@@ -94,52 +94,67 @@ async function insertFights() {
       const cleanedNotes = record.Notes?.trim()?.replaceAll("\n", "");
       let fightDate = new Date(record.Date.trim());
       let winnerId = null;
-
+      const mainBoxerId = boxerHashMap[mainBoxerName].id;
+      const opponentBoxerId = boxerHashMap[cleanedOpponent].id;
       //console.log(record.Date, boxer.name);
       //console.log(fightDate, fightDate === "Invalid Date");
+      //look up IDs of boxers from hashMap
       if (cleanedResult === "Win") {
-        winnerId = 1;
+        winnerId = mainBoxerId;
+        //console.log(winnerId);
       } else if (cleanedResult === "Loss") {
-        winnerId = 2;
+        winnerId = opponentBoxerId;
+        //console.log(winnerId);
       }
 
+      //     id        Int     @id @default(autoincrement())
+      // boxers    Boxer[]
+      // winner    Boxer?  @relation("winner",fields: [winnerId], references: [id])
+      // winnerId  Int?
+      // outcome   String
+      // roundTime String
+      // date      DateTime  @db.Date
+      // location  String
+      // notes     String?
+
       const cleanedRecord = {
-        // No: cleanedNo,
-        Date: fightDate,
-        //Result: cleanedResult,
-        //Opponent: cleanedOpponent,
-        Type: cleanedType,
-        Round_Time: cleanedRoundTime,
-        //Location: cleanedLocation,
-        //Notes: cleanedNotes,
+        date: fightDate,
+        outcome: cleanedType,
+        roundTime: cleanedRoundTime,
+        location: cleanedLocation,
+        notes: cleanedNotes,
         winnerId: winnerId,
-        connect: { mainBoxer: boxer.name, opponentBoxer: cleanedOpponent },
+        //connect: { mainBoxer: boxer.name, opponentBoxer: cleanedOpponent },
         //showing one object instead of names
         //connect: [{ mainBoxer: boxer.name, OpponentBoxer: cleanedOpponent }],
         //showing two objects instead of one
-        //connect: [{ name: boxer.name }, { name: cleanedOpponent }],
       };
-
+      const fightWithRelatedData = {
+        ...cleanedRecord,
+        connect: [{ id: mainBoxerId }, { id: opponentBoxerId }],
+      };
       //console.log(cleanedRecord);
       //console.log(cleanedRecord.Date);
       try {
-        fightHashMap[fightDate.toISOString()] = cleanedRecord;
+        fightHashMap[fightDate.toISOString()] = fightWithRelatedData;
         fightsToInsert.push(cleanedRecord);
       } catch (error) {
         //console.log(record.Date);
         if (record.Date.includes("/")) {
           const [day, month, year] = record.Date.trim().split("/");
           const fightDate = new Date(`${month}/${day}/${year}`);
-          cleanedRecord.Date = fightDate;
-          fightHashMap[fightDate.toISOString()] = cleanedRecord;
+          cleanedRecord.date = fightDate;
+          fightWithRelatedData.date = fightDate;
+          fightHashMap[fightDate.toISOString()] = fightWithRelatedData;
           fightsToInsert.push(cleanedRecord);
           //console.log(fightHashMap);
         } else if (record.Date.includes("-")) {
           const [year, month, day] = record.Date.trim().split("-");
           fightHashMap[fightDate.toISOString()] = record;
           const fightDate = new Date(`${month}/${day}/${year}`);
-          cleanedRecord.Date = fightDate;
-          fightHashMap[fightDate.toISOString()] = cleanedRecord;
+          cleanedRecord.date = fightDate;
+          fightWithRelatedData.date = fightDate;
+          fightHashMap[fightDate.toISOString()] = fightWithRelatedData;
           fightsToInsert.push(cleanedRecord);
         }
       }
@@ -159,16 +174,9 @@ async function insertFights() {
   //this goes to 7839 to 7865 depending on where I use push
   //console.log(fightsToInsert);
   try {
-    const insertedFights = await prisma.boxer.create({
-      data: {
-        boxers: {
-          //what is connect doing here
-          connect: [{ name: boxer.name }],
-          connect: [{ name: record.Opponent?.trim()?.replaceAll("\n", "") }],
-        },
-      },
+    const insertedFights = await prisma.fight.createMany({
+      data: fightsToInsert,
     });
-    //console.log(insertedFights);
     console.timeEnd();
   } catch (error) {
     console.log("this entry did not work", error);
