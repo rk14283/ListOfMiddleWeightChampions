@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <style>
-  * {
-    /*  border: 1px solid red;*/
-  }
-
   html,
   body {
     height: 100%;
     width: 100%;
   }
-  /*3 dives, mainBoxer, opponentBoxer,vs*/
-  /* #h1 {
-    font-size: 10px;
-    height: 10px;
 
-    position: relative;
-  }*/
-  /*
-  .header {
-    height: 200vh;
-    width: 40%;
-    padding-top: 0 8%;
-  }*/
-
-  #h1 {
-    /*
-    font-size: 20px;
-    position: relative;
-    margin-top: 25vh;
-    */ /*
-    margin-top: 50vw;*/
-  }
   body {
     background-color: skyblue;
     display: flex;
@@ -41,13 +16,11 @@
 
   #container {
     display: flex;
-    /*flex-wrap: wrap-reverse;*/
     justify-content: center;
     flex-direction: row;
 
     align-items: center;
     gap: 20px;
-    /* position: absolute;*/
     font-size: 25px;
   }
   select {
@@ -59,23 +32,10 @@
   h3 {
     font-size: 40px;
   }
-  /*
-  #title {
-    justify-content: center;
-    margin-bottom: 30vw;
-  }
-  #vs {
-    margin-left: 50px;
-  }
-  */
-  #vs {
-  }
+
   .boxerCard {
     width: 35vw;
     max-width: 450px;
-    /*width: 20vw;*/
-
-    /*order: 0;*/
   }
   .boxerImageContainer {
     /*this is 100% of the direct parent*/
@@ -91,9 +51,6 @@
     width: 100%;
     max-height: 450px;
   }
-  #imageOne {
-    /* background-color: red;*/
-  }
 
   #boxerOne {
     border-color: red;
@@ -102,44 +59,14 @@
   #opponentPicture {
     border-color: blue;
   }
-  /*
-  #footer {
-    position: relative;
-    bottom: 0;
-    z-index: 100;
-  }
-  */
+
   #box {
     display: block;
     background-color: orange;
-    /*Adding vw seems to have fixed it*/
 
     height: 25px;
     width: 25vw;
   }
-
-  @media all and (min-height: 500px) /*all and (min-width: 2000px) */ {
-    body {
-      /* background-color: blue;*/
-    }
-  }
-
-  @media not all and (min-width: 1400px) {
-  }
-
-  /*@media not all and (min-width: 400px) {
-    #box {
-      margin-top: 50vw;
-    }
-  }
-  */
-
-  /*
-  #d3 {
-    margin-top: 100px;
-  }*/
-
-  /*d1,d2 have label text and dropdown*/
 </style>
 <html>
   <head>
@@ -151,7 +78,6 @@
   </head>
 
   <body>
-    <!--If I remove it then button does not work-->
     <div class="header">
       <h1 id="body-content" style="color: black">
         MiddleWeight Fanatasy Matchup
@@ -173,7 +99,6 @@
           </select>
         </label>
       </div>
-      <!-- <div id="title"><h3>MiddleWeight Fantasy Matchup</h3></div>-->
       <div id="vs"><h2 style="color: black">VS</h2></div>
 
       <div id="d2" class="boxerCard">
@@ -193,14 +118,9 @@
       </div>
     </div>
 
-    <!-- <div id="footer" style="text-align: center">-->
-    <!-- <div id="d3">-->
-
     <button id="box">Box</button>
 
     <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
-
-    <!-- </div>-->
   </body>
 
   <script>
@@ -208,7 +128,6 @@
 
     const opponenetLabel = document.getElementById("get-labelTwo");
     const boxButton = document.getElementById("box");
-    //console.log("fight!", boxButton);
     let mainBoxerName = document.getElementById("filters");
     let opponentBoxerName = document.getElementById("opponents");
     let mainBoxerText = null;
@@ -219,7 +138,6 @@
 
       for (var i = 0; i < length; i++) {
         if (dropdown.children[i].selected) {
-          //challenge, how do I convert this into a
           return dropdown.children[i].text;
         }
       }
@@ -230,8 +148,6 @@
 
     opponentBoxerName.onchange = function () {
       opponentBoxerText = findSelectedBoxerName(opponentBoxerName);
-
-      //document.getElementById("imageTwo").style.background = null;
     };
 
     label.onchange = () => displayImage("filters", "boxerOne");
@@ -268,10 +184,6 @@
 
       winnerIs.innerText = winnerText;
 
-      //console.log(winnerText);
-      //console.log("this is the main boxer dropdown", mainBoxerText);
-      //console.log("This is opponent boxer dropdown", opponentBoxerText);
-
       if (winnerText === mainBoxerText) {
         displayOutcome("green", "red", winnerText + " " + "won");
       } else if (winnerText === opponentBoxerText) {
@@ -295,10 +207,4 @@
       return boxerId;
     }
   </script>
-  <!--
-   1) Make the button bigger and put a bell icon 
-   2) image has to be centered and in a cirlce 
-   3) Drowpdown and text must fit screen when I expand 
-   4) Style the heading
-  -->
 </html>

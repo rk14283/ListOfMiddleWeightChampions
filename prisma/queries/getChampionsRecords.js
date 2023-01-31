@@ -14,8 +14,6 @@ async function queryingBoxer() {
       name: "Thomas Hearns",
     },
   });
-
-  //console.log(oneBoxerByName);
 }
 
 //queryingBoxer();
@@ -26,8 +24,6 @@ async function queryingBoxerNameAndFights() {
       name: "Thomas Hearns",
     },
   });
-
-  // console.log(oneBoxerName.id);
 
   let oneBoxerId = oneBoxerName.id;
 
@@ -61,10 +57,6 @@ async function queryingBoxersAgainstChampions() {
         boxers: {
           ////some, every,none, every with ray leonard, I get one fight
           every: {
-            //9927 gives an empty array because he never fought cotto
-            //id: { in: [oneBoxerId, 9927] }
-            //9858-9962 are champions
-
             id: {
               in: [oneBoxerId, i],
             },
@@ -74,12 +66,8 @@ async function queryingBoxersAgainstChampions() {
     });
     //console.log(opponents);
     for (var key in opponents) {
-      //if (opponents[key] !== undefined && opponents[key].length === 0)
       if (opponents[key].length != 0 && opponents[key] !== undefined) {
-        //Array contains all the champions  Tommy has fought
         championFights.push(opponents);
-        //console.log(championFights);
-        //if winnerid is 9956 then Tommy has won
         for (opponent of opponents) {
           if (opponent.winnerId === oneBoxerId) {
             console.log(opponents);
@@ -138,9 +126,6 @@ async function fightsWonByKo(name) {
   });
   console.log(winnerByKo);
   console.log(winnerByKo.fights.length);
-  //result of this is 107 but in reality it is 109
-  //bug: it is showing 2 less, for both Hearns and Robinson
-  //validation error means input not acceptable, validation is process of checking is input acceptable
 }
 
 //fightsWonByKo("Thomas Hearns");
@@ -174,7 +159,6 @@ async function findFightsWonByDecesionByName(name) {
   });
   console.log(wentTheDistance);
   console.log(wentTheDistance.fights.length);
-  //bug it shows two extra by decesion
 }
 //findFightsWonByDecesionByName("Sugar Ray Robinson");
 
@@ -189,7 +173,6 @@ async function countWins(name) {
     },
     select: {
       _count: {
-        //I broke it down to bare bones steps and then final part was a guess
         select: {
           //fights of sugar Ray
           fightsWon: true,
@@ -209,12 +192,10 @@ async function countFights(name) {
     //include is for related records
     //select specific field from a related record
     where: {
-      //I do this I get boxer's info without the fight
       name,
     },
     select: {
       _count: {
-        //I broke it down to bare bones steps and then final part was a guess
         select: {
           //fights of sugar Ray
           fights: true,
