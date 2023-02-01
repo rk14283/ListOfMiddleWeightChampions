@@ -7,10 +7,10 @@ async function seed() {
     where: {},
   });
   console.log(deletedFights);
-  // const deletedBoxers = await prisma.boxer.deleteMany({
-  //   where: {},
-  // });
-  // console.log(deletedBoxers);
+  const deletedBoxers = await prisma.boxer.deleteMany({
+    where: {},
+  });
+  console.log(deletedBoxers);
 }
 
 seed();
