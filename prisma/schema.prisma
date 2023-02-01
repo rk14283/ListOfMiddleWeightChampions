@@ -39,7 +39,7 @@ model Fight {
   boxers    Boxer[]
   winner    Boxer?  @relation("winner",fields: [winnerId], references: [id])
   //winnerId  Int?
-  winnerId    String 
+  winnerId    String? 
   outcome   String
   roundTime String
   date      DateTime  @db.Date
