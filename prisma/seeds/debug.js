@@ -1,5 +1,49 @@
 const { PrismaClient, Prisma } = require("@prisma/client");
+const { name } = require("ejs");
 const prisma = new PrismaClient();
+const fs = require("fs");
+let directroy = "boxers";
+let files = fs.readdirSync(directroy);
+for (var i = 0; i < files.length; i++) {
+  files[i] = "boxers/" + files[i];
+}
+
+async function recordDebug() {
+  for (var i = 0; i < files.length; i++) {
+    //reads JSON from file turning it to js object
+    const boxersRecord = fs.readFileSync(files[i]);
+    const boxer = JSON.parse(boxersRecord);
+    //console.log(boxer.name);
+    //69 in Prisma, 67 here
+    if (boxer.name === "Marvelous Marvin Hagler") {
+      console.log(boxer.record.length);
+    }
+
+    if (boxer.name === "Sugar Ray Leonard") {
+      // 46 in prisma 40 here
+      console.log(boxer.record.length);
+    }
+    if (boxer.name === "Thomas Hearns") {
+      //73 in prisma, 67 here
+      console.log(boxer.record.length);
+    }
+  }
+}
+//recordDebug();
+
+async function findDuplicates() {
+  let duplicateFight = await prisma.fight.findMany({
+    where: {
+      boxers: {
+        some: {
+          id: { in: ["4c5b7afd-5c17-4b93-862f-c65f694fb53b"] },
+        },
+      },
+    },
+  });
+  console.log(duplicateFight);
+}
+findDuplicates();
 const boxerFights = [
   {
     A: "d5400d29-df53-410c-8bfc-f8f5552ab971",
@@ -422,4 +466,4 @@ async function debug() {
   }
 }
 
-debug();
+//debug();
