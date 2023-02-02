@@ -38,7 +38,6 @@ async function seedChampions() {
         updatedHeight = updatedHeight * 10;
       }
     }
-    //console.log("this is new Height", updatedHeight);
     let updatedReach = 0;
     if (boxer.Reach && matchesReach) {
       if (matchesReach[1].includes("cm")) {
@@ -52,28 +51,16 @@ async function seedChampions() {
         updatedReach = Math.floor((updatedReach / 100) * 2.54);
       }
     }
-    //console.log("This is new reach", updatedReach);
     const dateOfBirth = boxer?.Born;
     const deathDate = boxer?.Died;
 
-    //console.log("This is birthdate", dateOfBirth);
-    //console.log("THis is death date", deathDate);
     const matchesDateOfBirth = dateOfBirth?.match(/\(([^()]*)\)/);
     const matchesDateOfDeath = deathDate?.match(/\(([^()]*)\)/);
-    //const dateTimeFormat = matchesDateOfBirth.toISOString();
 
     let dateTimeFormat = new Date(matchesDateOfBirth);
-    //  dateTimeFormat = dayjs(matchesDateOfBirth).format("MM/DD/YYYY");
-    //there are only two invalid dates with new Date but around 5 dayjs
-    //console.log(dateTimeFormat);
-    //regex is not working in some cases
 
-    // if (dateTimeFormat === "Invalid Date") {
-    //   console.log(boxerName);
-    // }
     let dateTimeFormatDeath = null;
     if (matchesDateOfDeath) {
-      //date of death is converted to date time format
       dateTimeFormatDeath = new Date(matchesDateOfDeath);
     }
     const boxerInfoData = {
@@ -95,13 +82,11 @@ async function seedChampions() {
       data: arrayOfBoxers,
     });
     console.log(insertedBoxers);
-    //console.timeEnd();
   } catch (error) {
     console.log(error);
   }
 }
 
-//await seedChampions();
 async function queryingAllBoxers() {
   let allBoxers = await prisma.boxer.findMany({
     where: {},
@@ -117,13 +102,10 @@ async function createHashMap() {
   }
   return boxerHashMap;
 }
-//  console.log(boxerHashMap);
 const opponentHashMap = {};
 async function getRecords() {
   boxerHashMap = await createHashMap();
-  //console.time();
   const boxersToInsert = [];
-  //const boxerHashMap = await createHashMap();
 
   for (var i = 0; i < files.length; i++) {
     const boxerData = fs.readFileSync(files[i]);
@@ -140,15 +122,12 @@ async function getRecords() {
       }
     }
   }
-  //console.log(boxersToInsert);
   const insertedOpponents = await prisma.boxer.createMany({
     data: boxersToInsert,
   });
   console.log(insertedOpponents);
-  //console.timeEnd();
 }
 
-//await getRecords();
 async function insertFights() {
   boxerHashMap = await createHashMap();
   const fightHashMap = {};
@@ -169,25 +148,15 @@ async function insertFights() {
       let winnerId = null;
       const mainBoxerId = boxerHashMap[mainBoxerName].id;
       const opponentBoxerId = boxerHashMap[cleanedOpponent].id;
-      //look up IDs of boxers from hashMap
-      //console.log(fightDate);
       if (record.Date.includes("–")) {
         const [year, month, day] = record.Date.trim().split("–");
         record.Date = `${month}/${day}/${year}`;
-        // fightHashMap[fightDate.toISOString()] = record;
-        //cleanedRecord.date = fightDate.toISOString();
-        //fightsToInsert.push(cleanedRecord);
       } else if (record.Date.includes("/")) {
         const [day, month, year] = record.Date.trim().split("/");
         record.Date = `${month}/${day}/${year}`;
-        // cleanedRecord.date = fightDate.toISOString();
-        // fightsToInsert.push(cleanedRecord);
       } else if (record.Date.includes("-")) {
         const [year, month, day] = record.Date.trim().split("-");
         record.Date = `${month}/${day}/${year}`;
-        // fightHashMap[fightDate.toISOString()] = record;
-        // cleanedRecord.date = fightDate.toISOString();
-        // fightsToInsert.push(cleanedRecord);
       }
       const test = dayjs(record.Date.trim()).format("YYYY/MM/DD");
 
@@ -203,7 +172,6 @@ async function insertFights() {
         console.log(record.Date);
       }
 
-      // console.log(test);
       if (cleanedResult === "Win") {
         winnerId = mainBoxerId;
       } else if (cleanedResult === "Loss") {
@@ -230,30 +198,6 @@ async function insertFights() {
       }
       fightHashMap[test][mainBoxerId] = cleanedRecord;
       fightHashMap[test][opponentBoxerId] = cleanedRecord;
-      //console.log(boxerFight);
-      // try {
-      //   cleanedRecord.date = fightDate.toISOString();
-      //   fightsToInsert.push(cleanedRecord);
-      // } catch (error) {
-      //   if (record.Date.includes("/")) {
-      //     const [day, month, year] = record.Date.trim().split("/");
-      //     const fightDate = new Date(`${month}/${day}/${year}`);
-      //     cleanedRecord.date = fightDate.toISOString();
-      //     fightsToInsert.push(cleanedRecord);
-      //   } else if (record.Date.includes("-")) {
-      //     const [year, month, day] = record.Date.trim().split("-");
-      //     const fightDate = new Date(`${month}/${day}/${year}`);
-      //     fightHashMap[fightDate.toISOString()] = record;
-      //     cleanedRecord.date = fightDate.toISOString();
-      //     fightsToInsert.push(cleanedRecord);
-      //   } else if (record.Date.includes("–")) {
-      //     const [year, month, day] = record.Date.trim().split("–");
-      //     const fightDate = new Date(`${month}/${day}/${year}`);
-      //     fightHashMap[fightDate.toISOString()] = record;
-      //     cleanedRecord.date = fightDate.toISOString();
-      //     fightsToInsert.push(cleanedRecord);
-      //   }
-      // }
     }
   }
   try {
@@ -276,8 +220,8 @@ async function insertFights() {
 }
 async function seedEverything() {
   console.time();
-  // await seedChampions();
-  //await getRecords();
+  await seedChampions();
+  await getRecords();
 
   await insertFights();
   console.timeEnd();
