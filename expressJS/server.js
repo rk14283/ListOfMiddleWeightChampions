@@ -41,8 +41,8 @@ app.get("/", async (request, response) => {
 });
 
 app.get("/api/simulatefight/:id1/:id2", async (request, response) => {
-  let mainBoxerId = parseInt(request.params.id1);
-  let opponentBoxerId = parseInt(request.params.id2);
+  let mainBoxerId = request.params.id1;
+  let opponentBoxerId = request.params.id2;
 
   async function getBoxerRecord(boxerId) {
     let boxerRecord = await prisma.boxer.findUnique({
@@ -89,7 +89,7 @@ app.get("/api/simulatefight/:id1/:id2", async (request, response) => {
 });
 
 app.get("/api/boxers/:id/json", async (request, response) => {
-  let boxerId = parseInt(request.params.id);
+  let boxerId = request.params.id;
 
   let oneBoxerInfo = await prisma.boxer.findUnique({
     where: {

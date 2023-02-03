@@ -211,6 +211,7 @@ async function insertFights() {
         (boxerFight) => Prisma.sql`(${boxerFight.A}, ${boxerFight.B})`
       )
     )}
+      
     ON CONFLICT DO NOTHING;
     `;
   } catch (error) {
