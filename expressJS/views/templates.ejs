@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    gap: 40px;
   }
 
   #container {
@@ -22,6 +22,10 @@
     align-items: center;
     gap: 20px;
     font-size: 25px;
+  }
+  .pageheading {
+    font-size: 40px;
+    text-align: center;
   }
   select {
     display: block;
@@ -34,7 +38,7 @@
   }
 
   .boxerCard {
-    width: 35vw;
+    width: 40vw;
     max-width: 450px;
   }
   .boxerImageContainer {
@@ -44,7 +48,7 @@
   .boxerImage {
     background: lightpink;
 
-    height: 35vw;
+    height: 40vw;
     border-radius: 50%;
     border-style: solid;
     object-fit: cover;
@@ -64,8 +68,44 @@
     display: block;
     background-color: orange;
 
-    height: 25px;
-    width: 25vw;
+    height: 16px;
+    padding: 16px 60px;
+  }
+  .dropdown {
+    font-size: 16px;
+    padding: 8px;
+  }
+  .dropdown-label {
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+    display: block;
+  }
+
+  @media screen and (min-width: 768px) {
+    .dropdown {
+      font-size: 24px;
+      padding: 8px;
+    }
+    .pageheading {
+      font-size: 60px;
+      margin: 40px 0;
+    }
+
+    .dropdown-label {
+      font-size: 24px;
+    }
+    #box {
+      font-size: 24px;
+    }
+  }
+  @media screen and (min-width: 798px) {
+    #box {
+      display: block;
+      background-color: orange;
+
+      height: 50px;
+    }
   }
 </style>
 <html>
@@ -79,8 +119,8 @@
 
   <body>
     <div class="header">
-      <h1 id="body-content" style="color: black">
-        MiddleWeight Fanatasy Matchup
+      <h1 id="body-content" style="color: black" class="pageheading">
+        Middleweight Fantasy Matchup
       </h1>
     </div>
     <div id="container">
@@ -89,10 +129,10 @@
           <img src="" id="boxerOne" class="boxerImage" />
         </div>
 
-        <label id="get-label">
+        <label id="get-label" class="dropdown-label">
           select a boxer
 
-          <select id="filters">
+          <select id="filters" class="dropdown">
             <% for (boxerName of boxerNames){ %>
             <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
             <% } %>
@@ -106,10 +146,10 @@
           <img src="" id="opponentPicture" class="boxerImage" />
         </div>
 
-        <label id="get-labelTwo">
+        <label id="get-labelTwo" class="dropdown-label">
           select an opponent
 
-          <select id="opponents">
+          <select id="opponents" class="dropdown">
             <% for (boxerName of boxerNames){ %>
             <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
             <% } %>
