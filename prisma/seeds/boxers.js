@@ -229,6 +229,7 @@ async function seedRecords() {
             location: location,
             notes: notes,
           },
+          atabase,
         });
         //console.log(insertedNameIDs);
         //this catches the entries or fight objects that were not inserted due to some error, and prints to console
