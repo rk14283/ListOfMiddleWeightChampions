@@ -130,9 +130,10 @@
         </div>
 
         <label id="get-label" class="dropdown-label">
-          select a boxer
+          Boxer
 
           <select id="filters" class="dropdown">
+            <option disabled selected>-- boxer --</option>
             <% for (boxerName of boxerNames){ %>
             <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
             <% } %>
@@ -147,9 +148,10 @@
         </div>
 
         <label id="get-labelTwo" class="dropdown-label">
-          select an opponent
+          Opponent
 
           <select id="opponents" class="dropdown">
+            <option disabled selected>-- boxer --</option>
             <% for (boxerName of boxerNames){ %>
             <option value="<%=boxerName.id%>"><%=boxerName.name%></option>
             <% } %>
