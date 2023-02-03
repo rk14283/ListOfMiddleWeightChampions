@@ -11,7 +11,6 @@ for (var i = 0; i < files.length; i++) {
 }
 const arrayOfBoxers = [];
 let boxerHashMap = {};
-//const opponentHashMap = {};
 let boxerFights = [];
 const fightHashMap = {};
 const fightsToInsert = [];
