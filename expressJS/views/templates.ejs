@@ -163,6 +163,7 @@
     <button id="box">Box</button>
 
     <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
+    <h3 style="color: rgb(255, 0, 149)" id="times"></h3>
   </body>
 
   <script>
@@ -221,10 +222,26 @@
       const winnerResponse = await fetch(
         `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
       );
+      const numberInRealLife = await fetch(
+        `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}/realLife`
+      );
+      //console.log(numberInRealLife)
+      var result = [];
+      /* for (var i of numberInRealLife) {
+        result.push([i, numberInRealLife]);
+      } */
+      //console.log(typeof numberInRealLife);
+      let jsonFought = await numberInRealLife.json();
+      let timesFought = jsonFought.length;
 
       let winnerText = await winnerResponse.text();
 
       winnerIs.innerText = winnerText;
+      if (timesFought === 1) {
+        times.innerText = "They fought once in real life";
+      } else if (timesFought > 1) {
+        times.innerText = `They fought ${timesFought} times in real life`;
+      }
 
       if (winnerText === mainBoxerText) {
         displayOutcome("green", "red", winnerText + " " + "won");

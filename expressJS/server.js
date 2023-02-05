@@ -88,6 +88,62 @@ app.get("/api/simulatefight/:id1/:id2", async (request, response) => {
   response.send(outcomeText);
 });
 
+app.get("/api/simulatefight/:id1/:id2/realLife", async (request, response) => {
+  let mainBoxerId = request.params.id1;
+  let opponentBoxerId = request.params.id2;
+  async function queryingFightAgainstBoxerInRealLife() {
+    let oneBoxerName = await prisma.boxer.findUnique({
+      where: {
+        id: mainBoxerId,
+      },
+    });
+
+    let oneBoxerId = mainBoxerId;
+
+    //challenging part, querying the opponenets
+
+    //FindMany returns whole record, findUnique error,and findFrist returns first record
+    let boxerRecord = await prisma.boxer.findUnique({
+      where: {
+        id: oneBoxerId,
+      },
+      //This code returned Hagler's record
+      include: {
+        fights: {
+          where: {
+            boxers: {
+              //every does not work, but works when used with two ids
+              every: {
+                //Findfirst and FindUnique returns same result but findmany returns an object or objects
+                id: {
+                  in: [oneBoxerId, opponentBoxerId],
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    let foungtInRealLifeTime = boxerRecord.fights.length;
+    //console.log(foungtInRealLifeTime);
+    let winnerIDs = [];
+    for (var i = 0; i < boxerRecord.fights.length; i++) {
+      //console.log(boxerRecord.fights[i].winnerId);
+      winnerIDs.push(boxerRecord.fights[i].winnerId);
+    }
+
+    //console.log(winnerIDs.length);
+    return winnerIDs;
+  }
+
+  queryingFightAgainstBoxerInRealLife();
+
+  let foughtInRealLifeArray = await queryingFightAgainstBoxerInRealLife();
+
+  let NumberOfTimesFought = foughtInRealLifeArray.length;
+  response.send(foughtInRealLifeArray);
+});
+
 app.get("/api/boxers/:id/json", async (request, response) => {
   let boxerId = request.params.id;
 
