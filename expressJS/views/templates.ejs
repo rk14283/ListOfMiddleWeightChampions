@@ -164,6 +164,7 @@
 
     <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
     <h3 style="color: rgb(255, 0, 149)" id="times"></h3>
+    <h3 style="color: rgb(68, 0, 255)" id="details"></h3>
   </body>
 
   <script>
@@ -201,6 +202,10 @@
       document.getElementById("imageOne").style.background = null;
       document.getElementById("imageTwo").style.background = null;
       const dropdown = document.getElementById(dropDownId);
+      //document.getElementById("winnerIs") = null
+      winnerIs.innerText = " ";
+      times.innerText = " ";
+      details.innerText = " ";
 
       let boxerId = dropdown.value;
 
@@ -233,14 +238,56 @@
       //console.log(typeof numberInRealLife);
       let jsonFought = await numberInRealLife.json();
       let timesFought = jsonFought.length;
+      let reMatchIds = [];
+
+      //console.log(jsonFought[1]);
+      let winsByMainBoxer = [];
+      let winsByOpponentBoxer = [];
+      let drawArray = [];
+
+      //filter the number of times mainBoxerID appears
+      for (fought of jsonFought) {
+        //console.log(fought);
+        reMatchIds.push(fought);
+      }
+      let countWinsMainBoxer = 0;
+      let countWinsOpponentBoxer = 0;
+      let countDraws = 0;
+      for (var i = 0; i < reMatchIds.length; i++) {
+        if (reMatchIds[i] === mainBoxerId) {
+          //console.log("false");
+          winsByMainBoxer.push(reMatchIds[i]);
+          countWinsMainBoxer = winsByMainBoxer.length;
+          //console.log(countWinsMainBoxer);
+        } else if (reMatchIds[i] === opponentBoxerId) {
+          winsByOpponentBoxer.push(reMatchIds[i]);
+          //console.log(winsByOpponentBoxer);
+          countWinsOpponentBoxer = winsByOpponentBoxer.length;
+        } else {
+          drawArray.push(reMatchIds[i]);
+          //console.log(drawArray);
+          countDraws = drawArray.length;
+          //console.log(countDraws);
+        }
+      }
 
       let winnerText = await winnerResponse.text();
 
       winnerIs.innerText = winnerText;
       if (timesFought === 1) {
-        times.innerText = "They fought once in real life";
+        times.innerText = `${mainBoxerText} & ${opponentBoxerText} fought once in real life`;
+        //But that is only possible if main boxer won, not possible if it was a draw
+        if (countWinsMainBoxer > 0) {
+          details.innerText = `${mainBoxerText} won`;
+          //console.log(winnerText);
+        } else if (countWinsOpponentBoxer > 0) {
+          details.innerText = `${opponentBoxerText} won`;
+        } else if (countDraws === 0) {
+          details.innerText = "It was a draw";
+        }
       } else if (timesFought > 1) {
-        times.innerText = `They fought ${timesFought} times in real life`;
+        times.innerText = `${mainBoxerText} & ${opponentBoxerText} fought ${timesFought} times in real life`;
+        details.innerText = `${countWinsMainBoxer} wins for ${mainBoxerText}  and ${countWinsOpponentBoxer} win(s) for ${opponentBoxerText} and ${countDraws} draw(s)`;
       }
 
       if (winnerText === mainBoxerText) {
