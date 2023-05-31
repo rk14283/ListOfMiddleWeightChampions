@@ -72,6 +72,7 @@ describe("Boxing Middleweight Fantasy Matchup", () => {
     cy.visit("http://localhost:3000/");
     cy.get("#filters").select(["Marvelous Marvin Hagler"]);
     cy.contains("button", "Box").click();
+    //need an h2
     cy.contains("#crashError", "Please select an opponent");
   });
 });
