@@ -14,7 +14,7 @@
 
 App demo
 ---
-![demo](https://github.com/rk14283/listOfMiddleWeightChampions/assets/59180436/e028b604-ee56-43ff-9c7c-41d16bb4b711)
+https://github.com/rk14283/listOfMiddleWeightChampions/assets/59180436/e028b604-ee56-43ff-9c7c-41d16bb4b711
 
 
 <h2>Used technologies</h2>
