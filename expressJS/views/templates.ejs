@@ -165,6 +165,7 @@
     <h3 style="color: rgb(255, 77, 0)" id="winnerIs"></h3>
     <h3 style="color: rgb(255, 0, 149)" id="times"></h3>
     <h3 style="color: rgb(68, 0, 255)" id="details"></h3>
+    <h3 style="color: rgb(0, 128, 0)" id="crashError"></h3>
   </body>
 
   <script>
@@ -206,7 +207,7 @@
       winnerIs.innerText = " ";
       times.innerText = " ";
       details.innerText = " ";
-
+      crashError.innerText = " ";
       let boxerId = dropdown.value;
 
       const response = await fetch(`/api/boxers/${boxerId}/json`);
@@ -223,6 +224,17 @@
       let mainBoxerId = getBoxerId("filters");
 
       let opponentBoxerId = getBoxerId("opponents");
+
+      if (mainBoxerId === "-- boxer --" && opponentBoxerId === "-- boxer --") {
+        crashError.innerText = "Please select a boxer and an opponent";
+        return;
+      } else if (opponentBoxerId === "-- boxer --") {
+        crashError.innerText = "Please select an opponent";
+        return;
+      } else if (mainBoxerId === "-- boxer --") {
+        crashError.innerText = "Please select a boxer";
+        return;
+      }
 
       const winnerResponse = await fetch(
         `/api/simulatefight/${mainBoxerId}/${opponentBoxerId}`
